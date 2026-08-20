@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}FIR Dockets & Case Registry — Digital Police Portal{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">CENTRAL RECORDS &bull; ALL JURISDICTIONS</div>
+    <h1>FIR Dockets & Investigation Registry</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Master register of all First Information Reports filed across police stations.
+    </p>
+  </div>
+  {% if current_user.role == 'user' %}
+    <a href="{{ url_for('user.file_fir') }}" class="btn saffron">+ File New FIR</a>
+  {% endif %}
+</div>
+
+<!-- Filter Bar -->
+<form method="GET" action="{{ url_for('fir.cases_list') }}" class="filter-bar" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+  <input type="text" name="q" value="{{ q or '' }}" placeholder="Search FIR number, crime type, complainant name, location..." style="flex:1;min-width:260px;padding:9px 14px;border:1px solid var(--border-medium);border-radius:var(--radius-sm);background:#FFFFFF;font-size:0.88rem;">
+  <select name="status" onchange="this.form.submit()" style="padding:9px 14px;border:1px solid var(--border-medium);border-radius:var(--radius-sm);background:#FFFFFF;font-size:0.88rem;">
+    <option value="">All Statuses</option>
+    <option value="FIR Registered" {{ 'selected' if status=='FIR Registered' else '' }}>FIR Registered</option>
+    <option value="Under Investigation" {{ 'selected' if status=='Under Investigation' else '' }}>Under Investigation</option>
+    <option value="Evidence Collected" {{ 'selected' if status=='Evidence Collected' else '' }}>Evidence Collected</option>
+    <option value="Investigation Completed" {{ 'selected' if status=='Investigation Completed' else '' }}>Investigation Completed</option>
+    <option value="Chargesheet Filed" {{ 'selected' if status=='Chargesheet Filed' else '' }}>Chargesheet Filed</option>
+    <option value="Case In Court" {{ 'selected' if status=='Case In Court' else '' }}>Case In Court</option>
+    <option value="Under Trial" {{ 'selected' if status=='Under Trial' else '' }}>Under Trial</option>
+    <option value="Case Closed" {{ 'selected' if status=='Case Closed' else '' }}>Case Closed</option>
+  </select>
+  <button type="submit" class="btn primary" style="padding:9px 18px;">Filter Records</button>
+  {% if q or status %}
+    <a href="{{ url_for('fir.cases_list') }}" class="btn ghost">Clear Filter</a>
+  {% endif %}
+</form>
+
+{% if firs %}
+<table class="ledger">
+  <thead>
+    <tr>
+      <th>FIR Number</th>
+      <th>Crime Classification</th>
+      <th>Complainant</th>
+      <th>Jurisdiction</th>
+      <th>Date Filed</th>
+      <th>Assigned IO</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for f in firs %}
+    <tr onclick="window.location='{{ url_for('fir.fir_details', fir_id=f.FIR_ID) if current_user.role=='user' else url_for('police.police_fir_view', fir_id=f.FIR_ID) }}'" style="cursor:pointer;">
+      <td class="mono">
+        <strong style="color:var(--gov-navy);">{{ f.FIR_Number }}</strong>
+      </td>
+      <td><strong>{{ f.Crime_Type }}</strong></td>
+      <td>{{ f.Complainant_Name or 'Citizen' }}</td>
+      <td>{{ f.Jurisdiction or f.Location or 'Central District' }}</td>
+      <td class="mono" style="color:var(--text-muted);">{{ f.Date_Filed|format_date }}</td>
+      <td>
+        {% if f.Officer_Name %}
+          <span style="font-weight:600;color:var(--gov-navy);">{{ f.Officer_Name }}</span>
+        {% else %}
+          <span style="color:var(--text-muted);font-style:italic;">Unassigned</span>
+        {% endif %}
+      </td>
+      <td><span class="stamp {{ status_class(f.Status) }}">{{ f.Status }}</span></td>
+      <td>
+        <a href="{{ url_for('fir.fir_details', fir_id=f.FIR_ID) if current_user.role=='user' else url_for('police.police_fir_view', fir_id=f.FIR_ID) }}" class="btn small" style="padding:3px 8px;font-size:0.75rem;">
+          View Docket &rarr;
+        </a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="panel empty-state" style="text-align:center;padding:36px 20px;">
+  <h3 style="color:var(--gov-navy);font-size:1.05rem;margin-bottom:6px;">No FIR Dockets Found</h3>
+  <p style="color:var(--text-muted);font-size:0.84rem;margin:0;">No police cases matched your search query.</p>
+</div>
+{% endif %}
+
+{% endblock %}

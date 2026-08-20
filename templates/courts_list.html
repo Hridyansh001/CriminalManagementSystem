@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Judicial Courts & Trial Schedules — CRMS{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">JUDICIARY &bull; DISTRICT & SESSIONS COURTS</div>
+    <h1>Judicial Courts & Case Trials</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Tribunals, magistrate courts, and active judicial trial case proceedings.
+    </p>
+  </div>
+</div>
+
+{% if not citizen_mode %}
+<div class="panel" style="margin-bottom:24px;">
+  <div class="panel-header">
+    <h3 class="panel-title">Judicial Courts Overview</h3>
+    <span style="font-size:0.8rem;color:var(--text-muted);">{{ courts|length }} Courts</span>
+  </div>
+  {% if courts %}
+  <table class="ledger">
+    <thead>
+      <tr>
+        <th>Court Name</th>
+        <th>Court Classification</th>
+        <th>Territorial Location</th>
+        <th>Presiding Judge</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for c in courts %}
+      <tr>
+        <td><strong>{{ c.Court_Name }}</strong></td>
+        <td>{{ c.Court_Type }}</td>
+        <td>{{ c.Location }}</td>
+        <td><strong style="color:var(--gov-navy);">{{ c.Judge_Name }}</strong></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-state">No courts registered.</div>
+  {% endif %}
+</div>
+{% endif %}
+
+<div class="panel">
+  <div class="panel-header">
+    <h3 class="panel-title">{{ 'My Judicial Cases Under Trial' if citizen_mode else 'Active Court Trial Cases' }}</h3>
+    <span style="font-size:0.8rem;color:var(--text-muted);">{{ cases|length }} Dockets</span>
+  </div>
+
+  {% if cases %}
+  <table class="ledger">
+    <thead>
+      <tr>
+        <th>Case Number</th>
+        <th>FIR Number</th>
+        <th>Court Division</th>
+        <th>Presiding Judge</th>
+        <th>Filing Date</th>
+        <th>Trial Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for cs in cases %}
+      <tr onclick="window.location='{{ url_for('fir.fir_details', fir_id=cs.FIR_ID) if current_user.role=='user' else url_for('police.police_fir_view', fir_id=cs.FIR_ID) }}'" style="cursor:pointer;">
+        <td class="mono"><strong style="color:var(--gov-navy);">{{ cs.Case_Number }}</strong></td>
+        <td class="mono"><strong>{{ cs.FIR_Number or ('FIR #' ~ cs.FIR_ID) }}</strong></td>
+        <td>{{ cs.Court_Name or 'Court of Sessions' }}</td>
+        <td>{{ cs.Judge_Name or 'Honorable Magistrate' }}</td>
+        <td class="mono" style="color:var(--text-muted);">{{ cs.Filing_Date|format_date }}</td>
+        <td><span class="stamp {{ status_class(cs.Status) }}">{{ cs.Status }}</span></td>
+        <td>
+          <a href="{{ url_for('fir.fir_details', fir_id=cs.FIR_ID) if current_user.role=='user' else url_for('police.police_fir_view', fir_id=cs.FIR_ID) }}" class="btn small" style="padding:3px 8px;font-size:0.75rem;">
+            View Trial &rarr;
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-state" style="text-align:center;padding:36px 20px;">
+      <h3 style="color:var(--gov-navy);font-size:1.05rem;margin-bottom:6px;">No Active Court Cases Found</h3>
+      <p style="color:var(--text-muted);font-size:0.84rem;margin:0;">No trial cases recorded at this stage.</p>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

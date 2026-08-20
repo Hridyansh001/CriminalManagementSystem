@@ -1,0 +1,1 @@
+SELECT * FROM FIR_Criminal

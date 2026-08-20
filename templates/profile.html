@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}User Profile — CRMS Portal{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">ACCOUNT MANAGEMENT &bull; OFFICIAL PROFILE</div>
+    <h1>{{ 'Account Settings' if is_settings else 'User Profile' }}</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Verified portal credentials and node identification details.
+    </p>
+  </div>
+</div>
+
+<div class="form-card-wrapper" style="max-width:760px;margin:0 auto;">
+  <div class="panel">
+    <div style="display:flex;align-items:center;gap:18px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border-light);">
+      <div style="width:64px;height:64px;border-radius:50%;background:var(--gov-navy);color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;">
+        {{ (current_user.Name or current_user.username or 'U')[0]|upper }}
+      </div>
+      <div>
+        <h2 style="font-size:1.25rem;color:var(--gov-navy);margin-bottom:2px;">{{ current_user.Name or current_user.username }}</h2>
+        <span class="stamp {{ 'st-fir' if current_user.role=='police' else 'st-green' }}">
+          {{ current_user.police_rank if current_user.role=='police' else 'CITIZEN' }} &bull; VERIFIED
+        </span>
+      </div>
+    </div>
+
+    <table class="kv-table">
+      <tr>
+        <th>Full Name</th>
+        <td><strong>{{ user_info.Name if user_info and user_info.Name else (current_user.Name or 'N/A') }}</strong></td>
+      </tr>
+      <tr>
+        <th>Email Address</th>
+        <td>{{ user_info.Email if user_info and user_info.Email else (current_user.email or 'N/A') }}</td>
+      </tr>
+      <tr>
+        <th>Contact Phone</th>
+        <td class="mono">{{ user_info.Phone if user_info and user_info.Phone else (current_user.phone or 'Not specified') }}</td>
+      </tr>
+      {% if current_user.role == 'police' %}
+      <tr>
+        <th>Badge Number</th>
+        <td class="mono"><strong style="color:var(--gov-saffron-dark);">{{ user_info.Badge_Number if user_info and user_info.Badge_Number else current_user.badge_number }}</strong></td>
+      </tr>
+      <tr>
+        <th>Police Rank</th>
+        <td><strong>{{ user_info.police_rank if user_info and user_info.police_rank else current_user.police_rank }}</strong></td>
+      </tr>
+      <tr>
+        <th>Assigned Police Station</th>
+        <td>{{ user_info.Station_Name if user_info and user_info.Station_Name else current_user.station_name }}</td>
+      </tr>
+      <tr>
+        <th>Station Jurisdiction</th>
+        <td>{{ user_info.Station_Jurisdiction if user_info and user_info.Station_Jurisdiction else 'Central Division' }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <th>Residential Address</th>
+        <td>{{ user_info.Residential_Address if user_info and user_info.Residential_Address else 'On File' }}</td>
+      </tr>
+      <tr>
+        <th>Date of Birth</th>
+        <td class="mono">{{ user_info.DOB|format_date if user_info and user_info.DOB else 'On File' }}</td>
+      </tr>
+      <tr>
+        <th>Gender</th>
+        <td>{{ user_info.Gender if user_info and user_info.Gender else 'On File' }}</td>
+      </tr>
+      {% endif %}
+    </table>
+
+    <div style="margin-top:24px;display:flex;justify-content:space-between;align-items:center;">
+      <a href="{{ url_for('dashboard') }}" class="btn ghost">&larr; Back to Dashboard</a>
+      <a href="{{ url_for('auth.logout') }}" class="btn danger">Sign Out of Portal</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

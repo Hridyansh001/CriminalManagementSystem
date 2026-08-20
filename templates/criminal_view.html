@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Dossier: {{ record.Name }} — CRMS Database{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow"><a href="{{ url_for('fir.criminals_list') }}">&larr; Back to Criminal Database</a></div>
+    <h1>Criminal Dossier: {{ record.Name }}</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Central Intelligence File &bull; Record ID: <span class="mono">CRIM-{{ "%04d"|format(record.Criminal_ID) }}</span>
+    </p>
+  </div>
+  <div class="actions">
+    {% if current_user.role == 'police' %}
+      <a href="{{ url_for('fir.criminal_add') }}" class="btn primary">+ New Record</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="detail-grid">
+  <!-- Criminal Profile Information -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">Personal & Criminal Profile</h3>
+      <span class="stamp {{ status_class(record.Status) }}">{{ record.Status or 'Accused' }}</span>
+    </div>
+    <table class="kv-table">
+      <tr><th>Record ID</th><td class="mono"><strong>CRIM-{{ "%04d"|format(record.Criminal_ID) }}</strong></td></tr>
+      <tr><th>Full Legal Name</th><td><strong>{{ record.Name }}</strong></td></tr>
+      <tr><th>Aliases / Street Names</th><td>{{ record.Aliases or 'None recorded' }}</td></tr>
+      <tr><th>National Identification</th><td class="mono">{{ record.National_ID or 'Not specified' }}</td></tr>
+      <tr><th>Current Legal Status</th><td><span class="stamp {{ status_class(record.Status) }}">{{ record.Status or 'Accused' }}</span></td></tr>
+      <tr><th>Threat / Crime Level</th><td><strong style="color:{{ 'var(--gov-red)' if record.Level_of_Crime=='High' else 'var(--text-main)' }};">{{ record.Level_of_Crime or 'Medium' }}</strong></td></tr>
+      <tr><th>Living Status</th><td>{{ record.Living_Status or 'Alive' }}</td></tr>
+    </table>
+  </div>
+
+  <!-- Linked Cases & FIRs -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">Linked FIR Dockets & Inquiries</h3>
+      <span style="font-size:0.8rem;color:var(--text-muted);">{{ linked_firs|length }} Inquiries</span>
+    </div>
+    {% if linked_firs %}
+      <table class="ledger">
+        <thead>
+          <tr>
+            <th>FIR Number</th>
+            <th>Crime Classification</th>
+            <th>Role</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for fir in linked_firs %}
+          <tr onclick="window.location='{{ url_for('fir.fir_details', fir_id=fir.FIR_ID) }}'" style="cursor:pointer;">
+            <td class="mono" style="font-weight:700;color:var(--gov-navy);">{{ fir.FIR_Number }}</td>
+            <td>{{ fir.Crime_Type }}</td>
+            <td><strong>{{ fir.Role or 'Accused' }}</strong></td>
+            <td><span class="stamp {{ status_class(fir.Status) }}">{{ fir.Status }}</span></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty-state" style="padding:24px;text-align:center;">
+        No active FIR dockets currently linked to this criminal profile.
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Criminal Intelligence Registry — CRMS Portal{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">INTELLIGENCE BUREAU &bull; CRIMINAL ROSTER</div>
+    <h1>Criminal Records Database</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Official central directory of accused, wanted, convicted, and classified individuals.
+    </p>
+  </div>
+  {% if current_user.role == 'police' %}
+  <a href="{{ url_for('fir.criminal_add') }}" class="btn primary">+ New Criminal Record</a>
+  {% endif %}
+</div>
+
+<!-- Search & Filter Bar -->
+<form method="GET" action="{{ url_for('fir.criminals_list') }}" class="filter-bar" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+  <input type="text" name="q" value="{{ q or '' }}" placeholder="Search by name, alias, or National ID..." style="flex:1;min-width:240px;padding:9px 14px;border:1px solid var(--border-medium);border-radius:var(--radius-sm);background:#FFFFFF;font-size:0.88rem;">
+  <select name="status" onchange="this.form.submit()" style="padding:9px 14px;border:1px solid var(--border-medium);border-radius:var(--radius-sm);background:#FFFFFF;font-size:0.88rem;">
+    <option value="">All Statuses</option>
+    {% for s in status_choices %}
+      <option value="{{ s }}" {{ 'selected' if status==s else '' }}>{{ s }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn primary" style="padding:9px 18px;">Search</button>
+  {% if q or status %}
+    <a href="{{ url_for('fir.criminals_list') }}" class="btn ghost">Clear Filter</a>
+  {% endif %}
+</form>
+
+{% if records %}
+<table class="ledger">
+  <thead>
+    <tr>
+      <th>Record ID</th>
+      <th>Full Name</th>
+      <th>Known Aliases</th>
+      <th>National ID</th>
+      <th>Crime Severity</th>
+      <th>Status</th>
+      <th>Living Status</th>
+      <th>Linked FIRs</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for r in records %}
+    <tr onclick="window.location='{{ url_for('fir.criminal_view', criminal_id=r.Criminal_ID) }}'" style="cursor:pointer;">
+      <td class="mono" style="font-weight:700;color:var(--gov-navy);">CRIM-{{ "%04d"|format(r.Criminal_ID) }}</td>
+      <td><strong>{{ r.Name }}</strong></td>
+      <td>{{ r.Aliases or '—' }}</td>
+      <td class="mono">{{ r.National_ID or '—' }}</td>
+      <td>
+        <span style="font-weight:600;color:{{ 'var(--gov-red)' if r.Level_of_Crime=='High' else ('var(--gov-amber-text)' if r.Level_of_Crime=='Medium' else 'var(--text-main)') }};">
+          {{ r.Level_of_Crime or 'Medium' }}
+        </span>
+      </td>
+      <td><span class="stamp {{ status_class(r.Status) }}">{{ r.Status or 'Accused' }}</span></td>
+      <td>{{ r.Living_Status or 'Alive' }}</td>
+      <td class="mono">{{ r.Linked_FIR_Count or 0 }} cases</td>
+      <td>
+        <a href="{{ url_for('fir.criminal_view', criminal_id=r.Criminal_ID) }}" class="btn small" style="padding:3px 8px;font-size:0.75rem;">
+          View Dossier &rarr;
+        </a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="panel empty-state" style="text-align:center;padding:36px 20px;">
+  <h3 style="color:var(--gov-navy);font-size:1.05rem;margin-bottom:6px;">No Criminal Profiles Found</h3>
+  <p style="color:var(--text-muted);font-size:0.84rem;margin:0;">No records matched your search criteria.</p>
+</div>
+{% endif %}
+
+{% endblock %}

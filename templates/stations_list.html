@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Police Stations & Precinct Network — CRMS{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">LAW ENFORCEMENT &bull; PRECINCT JURISDICTIONS</div>
+    <h1>Police Stations Directory</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Statewide network of police precincts, jurisdictional boundaries, and emergency contact lines.
+    </p>
+  </div>
+</div>
+
+{% if stations %}
+<table class="ledger">
+  <thead>
+    <tr>
+      <th>Station ID</th>
+      <th>Station Name</th>
+      <th>Metropolitan City</th>
+      <th>Jurisdiction Division</th>
+      <th>Physical Address</th>
+      <th>Emergency Phone</th>
+      <th>Station Roster</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for s in stations %}
+    <tr>
+      <td class="mono" style="font-weight:700;color:var(--gov-navy);">ST-{{ "%03d"|format(s.Station_ID) }}</td>
+      <td><strong>{{ s.Station_Name }}</strong></td>
+      <td>{{ s.City }}</td>
+      <td><span style="font-weight:600;color:var(--gov-navy);">{{ s.Jurisdiction }}</span></td>
+      <td>{{ s.Address }}</td>
+      <td class="mono"><strong>{{ s.Phone or '100 / 112' }}</strong></td>
+      <td class="mono">{{ s.Officer_Count or 0 }} officers</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="panel empty-state" style="text-align:center;padding:36px 20px;">
+  <h3 style="color:var(--gov-navy);font-size:1.05rem;margin-bottom:6px;">No Police Stations Listed</h3>
+  <p style="color:var(--text-muted);font-size:0.84rem;margin:0;">No station records found in the database.</p>
+</div>
+{% endif %}
+
+{% endblock %}

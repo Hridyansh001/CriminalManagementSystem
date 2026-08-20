@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Register Criminal Profile — CRMS{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow"><a href="{{ url_for('fir.criminals_list') }}">&larr; Back to Criminal Database</a></div>
+    <h1>Register New Criminal Profile</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Add a new individual to the Central Police Intelligence Registry.
+    </p>
+  </div>
+</div>
+
+<div class="form-card-wrapper" style="max-width:760px;margin:0 auto;">
+  <div class="panel">
+    <form method="POST" action="{{ url_for('fir.criminal_add') }}">
+      <div class="form-grid">
+        <div class="field">
+          <label for="name">Full Legal Name <span class="req">*</span></label>
+          <input type="text" id="name" name="name" placeholder="e.g. Vikramaditya 'Vicky' Malik" required autofocus>
+        </div>
+
+        <div class="field">
+          <label for="national_id">National ID / Aadhaar / Passport</label>
+          <input type="text" id="national_id" name="national_id" placeholder="e.g. AADHAAR-9988-1234">
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="aliases">Known Aliases / Monikers</label>
+          <input type="text" id="aliases" name="aliases" placeholder="e.g. Vicky Shooter, Baba">
+        </div>
+
+        <div class="field">
+          <label for="level_of_crime">Crime Level / Threat Classification</label>
+          <select id="level_of_crime" name="level_of_crime">
+            <option value="Low">Low Threat</option>
+            <option value="Medium" selected>Medium Threat</option>
+            <option value="High">High Threat / Gang Member</option>
+            <option value="Critical">Critical / Red Corner Notice</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="status">Current Police Status</label>
+          <select id="status" name="status">
+            <option value="Accused" selected>Accused</option>
+            <option value="Wanted">Wanted / Absconding</option>
+            <option value="In Custody">In Custody</option>
+            <option value="Under Investigation">Under Investigation</option>
+            <option value="Convicted">Convicted</option>
+            <option value="Acquitted">Acquitted</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="living_status">Living Status</label>
+          <select id="living_status" name="living_status">
+            <option value="Alive" selected>Alive</option>
+            <option value="Deceased">Deceased</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:20px;">
+        <a href="{{ url_for('fir.criminals_list') }}" class="btn ghost">Cancel</a>
+        <button type="submit" class="btn primary" style="padding:10px 24px;font-weight:700;">
+          SAVE CRIMINAL PROFILE
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

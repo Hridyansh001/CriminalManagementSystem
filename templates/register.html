@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Citizen Registration — Digital Police Portal | CRMS{% endblock %}
+{% block guest_content %}
+
+<div class="login-card-container">
+  
+  <!-- Left Hero Panel -->
+  <div class="login-hero-side">
+    <div>
+      <div style="width:52px;height:52px;background:#FFFFFF;border-radius:var(--radius-sm);padding:6px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="46" stroke="#0A2647" stroke-width="3" fill="#FFFFFF"/>
+          <path d="M50 15 L53 25 L63 25 L55 31 L58 41 L50 35 L42 41 L45 31 L37 25 L47 25 Z" fill="#FF9933"/>
+          <circle cx="50" cy="62" r="14" stroke="#0A2647" stroke-width="2" fill="none"/>
+          <line x1="50" y1="48" x2="50" y2="76" stroke="#0A2647" stroke-width="1.5"/>
+          <line x1="36" y1="62" x2="64" y2="62" stroke="#0A2647" stroke-width="1.5"/>
+          <line x1="40" y1="52" x2="60" y2="72" stroke="#0A2647" stroke-width="1.5"/>
+          <line x1="40" y1="72" x2="60" y2="52" stroke="#0A2647" stroke-width="1.5"/>
+          <rect x="35" y="80" width="30" height="4" rx="2" fill="#138808"/>
+        </svg>
+      </div>
+
+      <h2 style="font-size:1.45rem;color:#FFFFFF;margin-bottom:6px;line-height:1.3;">
+        CITIZEN ACCOUNT<br><span style="color:var(--gov-saffron);">REGISTRATION</span>
+      </h2>
+      <p style="font-size:0.84rem;color:#CBD5E1;line-height:1.5;margin:0 0 24px 0;">
+        Create a verified citizen profile on the National Crime Records Management Portal to lodge FIRs and track case progress online.
+      </p>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:16px;">
+        <div style="font-size:0.75rem;font-weight:700;color:var(--gov-saffron);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">
+          Citizen Benefits:
+        </div>
+        <div style="font-size:0.8rem;color:#E2E8F0;line-height:1.5;">
+          &bull; Immediate e-FIR lodging with instant reference<br>
+          &bull; Live SMS / Portal milestone updates<br>
+          &bull; Direct visibility into assigned Investigating Officer<br>
+          &bull; Court hearing & case disposal tracking
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:0.72rem;color:#94A3B8;border-top:1px solid rgba(255,255,255,0.12);padding-top:14px;margin-top:20px;">
+      Ministry of Home Affairs &bull; Digital India Initiative
+    </div>
+  </div>
+
+  <!-- Right Form Panel -->
+  <div class="login-form-side">
+    <div style="margin-bottom:20px;">
+      <h2 style="font-size:1.35rem;color:var(--gov-navy);margin-bottom:4px;">Register New Citizen</h2>
+      <p style="color:var(--text-muted);font-size:0.84rem;margin:0;">
+        Enter your details to create your secure citizen identity.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('auth.register') }}">
+      <div class="field">
+        <label for="name">Full Legal Name <span class="req">*</span></label>
+        <input type="text" id="name" name="name" placeholder="e.g. Vikramaditya Singh" required autofocus>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="e.g. vikram@example.com" required>
+        </div>
+        <div class="field">
+          <label for="phone">Mobile Phone <span class="req">*</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="e.g. 9876543210" required>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" name="dob">
+        </div>
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="residential_address">Residential Address</label>
+        <input type="text" id="residential_address" name="residential_address" placeholder="e.g. Flat 402, Block B, Civil Lines, New Delhi">
+      </div>
+
+      <div class="field">
+        <label for="password">Create Password <span class="req">*</span></label>
+        <input type="password" id="password" name="password" placeholder="Create a secure password" required minlength="6">
+      </div>
+
+      <button type="submit" class="btn saffron" style="width:100%;padding:11px;font-size:0.92rem;font-weight:700;">
+        CREATE CITIZEN ACCOUNT
+      </button>
+    </form>
+
+    <div style="text-align:center;margin:18px 0 0 0;font-size:0.82rem;color:var(--text-muted);">
+      Already registered? <a href="{{ url_for('auth.login') }}" style="font-weight:700;color:var(--gov-navy);">Sign In &rarr;</a>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

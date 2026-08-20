@@ -270,11 +270,11 @@ VALUES
 -- FIR 3
 (3, 'FIR Registered', '2026-03-01', 'System',
  'FIR successfully registered.'),
-(3, 'Investigation Started', '2026-03-02', 'Detective Pikachu',
+(3, 'Investigation Started', '2026-03-02', 'Frank Castle',
  'Investigation initiated.'),
-(3, 'Evidence Collected', '2026-03-04', 'Detective Pikachu',
+(3, 'Evidence Collected', '2026-03-04', 'Frank Castle',
  'CCTV and witness evidence collected.'),
-(3, 'Chargesheet Filed', '2026-05-20', 'Detective Pikachu',
+(3, 'Chargesheet Filed', '2026-05-20', 'Frank Castle',
  'Chargesheet submitted.'),
 (3, 'Case In Court', '2026-06-01', 'System',
  'Case transferred to court.'),
@@ -348,9 +348,9 @@ VALUES
 -- FIR 12
 (12, 'FIR Registered', '2026-08-16', 'System',
  'Missing person complaint registered.'),
-(12, 'Investigation Started', '2026-08-16', 'Detective Pikachu',
+(12, 'Investigation Started', '2026-08-16', 'Frank Castle',
  'Search operation initiated.'),
-(12, 'Under Investigation', '2026-08-17', 'Detective Pikachu',
+(12, 'Under Investigation', '2026-08-17', 'Frank Castle',
  'Search operation continuing.');
 
 

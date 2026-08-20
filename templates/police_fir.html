@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% block title %}Manage FIR {{ fir.FIR_Number }} — Police Command Console{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">
+      <a href="{{ url_for('police.dashboard') }}">&larr; Back to Officer Dashboard</a>
+    </div>
+    <h1>Police Console & Case Diary: {{ fir.FIR_Number }}</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Incident: <strong>{{ fir.Crime_Type }}</strong> &bull; Filed: {{ fir.Date_Filed|format_date }} &bull; Station: {{ fir.Station_Name or 'Central Command' }}
+    </p>
+  </div>
+  <div class="actions">
+    <a href="{{ url_for('police.add_evidence', fir_id=fir.FIR_ID) }}" class="btn primary">
+      + Log Evidence Item
+    </a>
+  </div>
+</div>
+
+<!-- Update FIR Status Panel -->
+<div class="panel" style="margin-bottom:24px;border-left:4px solid var(--gov-saffron-dark);">
+  <div class="panel-header">
+    <h3 class="panel-title" style="color:var(--gov-navy);">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Update FIR Investigation & Legal Status
+    </h3>
+    <span class="stamp {{ status_class(fir.Status) }}" style="font-size:0.85rem;">Current: {{ fir.Status }}</span>
+  </div>
+
+  <form method="POST" action="{{ url_for('police.update_fir_status', fir_id=fir.FIR_ID) }}" class="form-grid">
+    <div class="field">
+      <label for="status">Change Status Stage <span class="req">*</span></label>
+      <select id="status" name="status" required>
+        {% for st in status_choices %}
+          <option value="{{ st }}" {{ 'selected' if fir.Status == st else '' }}>{{ st }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="remarks">Case Diary Entry / Official Remarks</label>
+      <input type="text" id="remarks" name="remarks" placeholder="e.g. Completed suspect interrogation; chargesheet prepared for filing.">
+    </div>
+
+    <div style="grid-column:1/-1;display:flex;justify-content:flex-end;">
+      <button type="submit" class="btn saffron" style="font-weight:700;padding:9px 20px;">
+        UPDATE STATUS & LOG ENTRY
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="detail-grid">
+  <!-- FIR Record Details -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">Complainant & FIR Details</h3>
+    </div>
+    <table class="kv-table">
+      <tr><th>FIR Number</th><td class="mono"><strong>{{ fir.FIR_Number }}</strong></td></tr>
+      <tr><th>Crime Type</th><td><strong>{{ fir.Crime_Type }}</strong></td></tr>
+      <tr><th>Date Filed</th><td class="mono">{{ fir.Date_Filed|format_date }}</td></tr>
+      <tr><th>Place of Occurrence</th><td>{{ fir.Location or '—' }}</td></tr>
+      <tr><th>Jurisdiction</th><td>{{ fir.Jurisdiction or 'Central District' }}</td></tr>
+      <tr>
+        <th>Complainant</th>
+        <td>
+          <strong>{{ fir.Complainant_Name }}</strong><br>
+          <span style="color:var(--text-muted);font-size:0.8rem;">Email: {{ fir.Complainant_Email }}</span><br>
+          <span class="mono" style="color:var(--text-muted);font-size:0.8rem;">Phone: {{ fir.Complainant_Phone }}</span><br>
+          <span style="font-size:0.78rem;color:var(--text-dim);">Address: {{ fir.Complainant_Address or 'On File' }}</span>
+        </td>
+      </tr>
+    </table>
+
+    <h4 style="margin-top:16px;color:var(--gov-navy);font-size:0.88rem;">Original Statement of Complaint</h4>
+    <p style="color:var(--text-main);font-size:0.86rem;background:#F8FAFC;padding:10px;border:1px solid var(--border-light);border-radius:var(--radius-sm);line-height:1.5;">
+      {{ fir.Description }}
+    </p>
+  </div>
+
+  <!-- Investigation Details -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">Officer Investigation Diary</h3>
+    </div>
+    {% if investigation %}
+      <table class="kv-table">
+        <tr>
+          <th>Assigned Officer</th>
+          <td>
+            <strong>{{ investigation.Officer_Name }}</strong><br>
+            <span style="color:var(--gov-navy);font-size:0.8rem;">Rank: {{ investigation.police_rank }} | Badge: {{ investigation.Badge_Number }}</span>
+          </td>
+        </tr>
+        <tr><th>Station</th><td>{{ investigation.Station_Name or 'Central Station' }} ({{ investigation.City or 'Delhi' }})</td></tr>
+        <tr><th>Investigation Status</th><td><span class="stamp {{ status_class(investigation.Status) }}">{{ investigation.Status }}</span></td></tr>
+        <tr><th>Start Date</th><td class="mono">{{ investigation.Start_Date|format_date }}</td></tr>
+        <tr><th>Chargesheet Date</th><td class="mono">{{ investigation.Chargesheet_Date|format_date if investigation.Chargesheet_Date else 'Pending' }}</td></tr>
+      </table>
+      <h4 style="margin-top:16px;color:var(--gov-navy);font-size:0.88rem;">Investigation Findings</h4>
+      <p style="color:var(--text-main);font-size:0.86rem;background:#F8FAFC;padding:10px;border:1px solid var(--border-light);border-radius:var(--radius-sm);">
+        {{ investigation.Findings or 'Initial investigation started. Statements being recorded.' }}
+      </p>
+    {% else %}
+      <div class="empty-state">No investigation record assigned yet. Updating status will auto-assign your badge.</div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Accused Suspects & Criminal Linking Section -->
+<div class="panel" style="margin-top:20px;">
+  <div class="panel-header">
+    <h3 class="panel-title">Linked Accused Suspects & Criminals</h3>
+    <span style="font-size:0.8rem;color:var(--text-muted);">{{ criminals|length }} Suspects Linked</span>
+  </div>
+
+  {% if criminals %}
+  <table class="ledger" style="margin-bottom:18px;">
+    <thead>
+      <tr>
+        <th>Criminal Name</th>
+        <th>National ID</th>
+        <th>Threat Level</th>
+        <th>Role in Crime</th>
+        <th>Accused Status</th>
+        <th>Living Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in criminals %}
+      <tr>
+        <td>
+          <a href="{{ url_for('fir.criminal_view', criminal_id=c.Criminal_ID) }}" style="font-weight:700;color:var(--gov-navy);">
+            {{ c.Name }}
+          </a>
+          {% if c.Aliases %}<br><span style="font-size:0.75rem;color:var(--text-muted);">Alias: {{ c.Aliases }}</span>{% endif %}
+        </td>
+        <td class="mono">{{ c.National_ID or '—' }}</td>
+        <td>{{ c.Level_of_Crime or 'Medium' }}</td>
+        <td><strong>{{ c.Role or 'Accused' }}</strong></td>
+        <td><span class="stamp {{ status_class(c.Accused_Status or 'Accused') }}">{{ c.Accused_Status or 'Accused' }}</span></td>
+        <td>{{ c.Living_Status or 'Alive' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state" style="margin-bottom:16px;">No suspects currently linked to this FIR docket.</div>
+  {% endif %}
+
+  <!-- Form to Link Criminal -->
+  <div style="background:#F8FAFC;border:1px solid var(--border-light);padding:14px 18px;border-radius:var(--radius-sm);">
+    <h4 style="font-size:0.86rem;color:var(--gov-navy);margin-bottom:10px;">Link Suspect from Criminal Database to this FIR</h4>
+    <form method="POST" action="{{ url_for('police.add_criminal_to_fir', fir_id=fir.FIR_ID) }}" style="display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;align-items:end;">
+      <div>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">Select Criminal Record</label>
+        <select name="criminal_id" required style="width:100%;padding:7px 10px;border:1px solid var(--border-medium);border-radius:var(--radius-sm);font-size:0.84rem;">
+          <option value="">-- Choose Criminal --</option>
+          {% for ac in all_criminals %}
+            <option value="{{ ac.Criminal_ID }}">{{ ac.Name }} (ID: {{ ac.National_ID or ac.Criminal_ID }}) - {{ ac.Level_of_Crime or 'Medium' }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">Role</label>
+        <select name="role" style="width:100%;padding:7px 10px;border:1px solid var(--border-medium);border-radius:var(--radius-sm);font-size:0.84rem;">
+          <option value="Primary Accused">Primary Accused</option>
+          <option value="Co-Accused">Co-Accused</option>
+          <option value="Conspirator">Conspirator</option>
+          <option value="Accomplice">Accomplice</option>
+          <option value="Suspect">Suspect</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:0.78rem;font-weight:600;display:block;margin-bottom:4px;">Accused Status</label>
+        <select name="accused_status" style="width:100%;padding:7px 10px;border:1px solid var(--border-medium);border-radius:var(--radius-sm);font-size:0.84rem;">
+          <option value="Under Investigation">Under Investigation</option>
+          <option value="In Custody">In Custody</option>
+          <option value="Absconding / Wanted">Absconding / Wanted</option>
+          <option value="Bail Granted">Bail Granted</option>
+          <option value="Chargesheeted">Chargesheeted</option>
+        </select>
+      </div>
+      <button type="submit" class="btn primary" style="padding:7px 16px;font-size:0.84rem;">Link to FIR</button>
+    </form>
+  </div>
+</div>
+
+<!-- Evidence Vault Section -->
+<div class="panel" style="margin-top:20px;">
+  <div class="panel-header">
+    <h3 class="panel-title">Evidence Vault & Chain-of-Custody</h3>
+    <a href="{{ url_for('police.add_evidence', fir_id=fir.FIR_ID) }}" class="btn small primary">+ Add Evidence Item</a>
+  </div>
+
+  {% if evidence %}
+  <table class="ledger">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Collected Date</th>
+        <th>Storage Locker</th>
+        <th>Officer</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ev in evidence %}
+      <tr>
+        <td><strong>{{ ev.Evidence_Type }}</strong></td>
+        <td>{{ ev.Description }}</td>
+        <td class="mono">{{ ev.Collected_Date|format_date }}</td>
+        <td class="mono"><strong>{{ ev.Storage_Location }}</strong></td>
+        <td>{{ ev.Collected_By_Name }}</td>
+        <td><span class="stamp {{ status_class(ev.Status) }}">{{ ev.Status }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">No evidence items registered yet. Use the button above to log physical or forensic evidence.</div>
+  {% endif %}
+</div>
+
+<!-- FIR Status History Timeline Log -->
+<div class="panel" style="margin-top:20px;">
+  <div class="panel-header">
+    <h3 class="panel-title">FIR Case Diary & Status Audit History</h3>
+  </div>
+  {% if history %}
+  <table class="ledger">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Status Recorded</th>
+        <th>Updated By</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for h in history %}
+      <tr>
+        <td class="mono">{{ h.Updated_Date|format_date }}</td>
+        <td><span class="stamp {{ status_class(h.Status) }}">{{ h.Status }}</span></td>
+        <td><strong>{{ h.Updated_By or 'System' }}</strong></td>
+        <td>{{ h.Remarks }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">No status history recorded.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

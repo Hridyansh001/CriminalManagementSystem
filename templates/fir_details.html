@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% block title %}FIR {{ fir.FIR_Number }} — Digital Police Portal{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">
+      <a href="{{ url_for('user.dashboard') if current_user.role=='user' else url_for('police.dashboard') }}">&larr; Back to Dashboard</a>
+    </div>
+    <h1>FIR Docket: {{ fir.FIR_Number }}</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Registered on {{ fir.Date_Filed|format_date }} &bull; Category: <strong>{{ fir.Crime_Type }}</strong> &bull; Station: {{ fir.Station_Name or 'Central Command' }}
+    </p>
+  </div>
+  <div class="actions">
+    {% if current_user.role == 'police' %}
+      <a href="{{ url_for('police.police_fir_view', fir_id=fir.FIR_ID) }}" class="btn saffron">
+        Police Officer Console &rarr;
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+<!-- 6-Stage Pipeline Tracker -->
+<div class="panel" style="margin-bottom:24px;">
+  <div class="panel-header">
+    <h3 class="panel-title">Investigation & Judicial Lifecycle Pipeline</h3>
+    <span class="stamp {{ status_class(fir.Status) }}">{{ fir.Status }}</span>
+  </div>
+
+  <div class="timeline-tracker">
+    <div class="timeline-node {{ 'completed' if 'registered' in reached_statuses else '' }} {{ 'active' if fir.Status == 'FIR Registered' else '' }}">
+      <div class="timeline-dot">1</div>
+      <div class="timeline-label">FIR Lodged</div>
+      <div class="timeline-sub">{{ fir.Date_Filed|format_date }}</div>
+    </div>
+
+    <div class="timeline-node {{ 'completed' if 'investigation' in reached_statuses else '' }} {{ 'active' if fir.Status == 'Under Investigation' else '' }}">
+      <div class="timeline-dot">2</div>
+      <div class="timeline-label">Investigation</div>
+      <div class="timeline-sub">{{ investigation.police_rank if investigation else 'IO Assigned' }}</div>
+    </div>
+
+    <div class="timeline-node {{ 'completed' if 'evidence' in reached_statuses else '' }} {{ 'active' if fir.Status == 'Evidence Collected' else '' }}">
+      <div class="timeline-dot">3</div>
+      <div class="timeline-label">Evidence Vault</div>
+      <div class="timeline-sub">{{ evidence|length }} Items Logged</div>
+    </div>
+
+    <div class="timeline-node {{ 'completed' if 'chargesheet' in reached_statuses else '' }} {{ 'active' if fir.Status == 'Chargesheet Filed' else '' }}">
+      <div class="timeline-dot">4</div>
+      <div class="timeline-label">Chargesheet</div>
+      <div class="timeline-sub">{{ investigation.Chargesheet_Date|format_date if (investigation and investigation.Chargesheet_Date) else 'Preparation' }}</div>
+    </div>
+
+    <div class="timeline-node {{ 'completed' if 'court' in reached_statuses else '' }} {{ 'active' if fir.Status in ('Case In Court', 'Under Trial') else '' }}">
+      <div class="timeline-dot">5</div>
+      <div class="timeline-label">Court Trial</div>
+      <div class="timeline-sub">{{ case.Case_Number if case else 'Judicial Docket' }}</div>
+    </div>
+
+    <div class="timeline-node {{ 'completed' if 'judgment' in reached_statuses else '' }} {{ 'active' if fir.Status in ('Case Closed', 'Closed') else '' }}">
+      <div class="timeline-dot">6</div>
+      <div class="timeline-label">Disposal / Verdict</div>
+      <div class="timeline-sub">{{ judgment.Verdict if judgment else ('Closed' if fir.Status in ('Case Closed', 'Closed') else 'Final Verdict') }}</div>
+    </div>
+  </div>
+</div>
+
+<div class="detail-grid">
+  <!-- FIR Details -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">FIR Docket Information</h3>
+    </div>
+    <table class="kv-table">
+      <tr><th>FIR Number</th><td class="mono"><strong>{{ fir.FIR_Number }}</strong></td></tr>
+      <tr><th>Crime Classification</th><td><strong>{{ fir.Crime_Type }}</strong></td></tr>
+      <tr><th>Current Status</th><td><span class="stamp {{ status_class(fir.Status) }}">{{ fir.Status }}</span></td></tr>
+      <tr><th>Date Filed</th><td class="mono">{{ fir.Date_Filed|format_date }}</td></tr>
+      <tr><th>Place of Occurrence</th><td>{{ fir.Location or '—' }}</td></tr>
+      <tr><th>Jurisdiction Division</th><td>{{ fir.Jurisdiction or 'Central District' }}</td></tr>
+      <tr>
+        <th>Complainant</th>
+        <td>
+          <strong>{{ fir.Complainant_Name or 'Citizen' }}</strong>
+          {% if fir.Complainant_Email %}<br><span style="color:var(--text-muted);font-size:0.8rem;">{{ fir.Complainant_Email }}</span>{% endif %}
+          {% if fir.Complainant_Phone %}<br><span class="mono" style="color:var(--text-muted);font-size:0.8rem;">{{ fir.Complainant_Phone }}</span>{% endif %}
+        </td>
+      </tr>
+    </table>
+
+    <h4 style="margin-top:18px;color:var(--gov-navy);font-size:0.88rem;">Incident Statement of Facts</h4>
+    <p style="color:var(--text-main);line-height:1.6;background:#F8FAFC;padding:12px;border:1px solid var(--border-light);border-radius:var(--radius-sm);margin-top:6px;">
+      {{ fir.Description or 'No description recorded.' }}
+    </p>
+  </div>
+
+  <!-- Police Investigation & Officer -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">Police Investigation & Case Diary</h3>
+    </div>
+    {% if investigation %}
+      <table class="kv-table">
+        <tr>
+          <th>Investigating Officer</th>
+          <td>
+            <strong>{{ investigation.Officer_Name }}</strong><br>
+            <span style="color:var(--gov-navy);font-size:0.8rem;font-weight:600;">Badge: {{ investigation.Badge_Number }} | Rank: {{ investigation.police_rank }}</span><br>
+            <span style="color:var(--text-muted);font-size:0.78rem;">Station: {{ investigation.Station_Name or 'Central Police Station' }}</span>
+          </td>
+        </tr>
+        <tr><th>Investigation Status</th><td><span class="stamp {{ status_class(investigation.Status) }}">{{ investigation.Status or 'Ongoing' }}</span></td></tr>
+        <tr><th>Start Date</th><td class="mono">{{ investigation.Start_Date|format_date }}</td></tr>
+        <tr><th>Chargesheet Date</th><td class="mono">{{ investigation.Chargesheet_Date|format_date if investigation.Chargesheet_Date else 'Under Preparation' }}</td></tr>
+      </table>
+      <h4 style="margin-top:16px;color:var(--gov-navy);font-size:0.88rem;">Case Diary Findings</h4>
+      <p style="color:var(--text-main);font-size:0.88rem;background:#F8FAFC;padding:10px;border:1px solid var(--border-light);border-radius:var(--radius-sm);margin-top:6px;">
+        {{ investigation.Findings or 'Initial case diary opened. Witness statements and forensic analysis in progress.' }}
+      </p>
+    {% else %}
+      <div class="empty-state" style="padding:24px;text-align:center;">
+        <h4 style="color:var(--gov-navy);font-size:0.92rem;margin-bottom:4px;">Pending Officer Assignment</h4>
+        <p style="color:var(--text-muted);font-size:0.82rem;margin:0;">The station station commander will assign a designated investigating officer shortly.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="detail-grid" style="margin-top:20px;">
+  <!-- Accused Suspects -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">Accused Individuals & Suspects</h3>
+      <span style="font-size:0.8rem;color:var(--text-muted);">{{ criminals|length }} Linked</span>
+    </div>
+    {% if criminals %}
+      <table class="ledger">
+        <thead><tr><th>Name</th><th>National ID</th><th>Role / Accused Status</th><th>Living Status</th></tr></thead>
+        <tbody>
+        {% for c in criminals %}
+          <tr onclick="window.location='{{ url_for('fir.criminal_view', criminal_id=c.Criminal_ID) }}'" style="cursor:pointer;">
+            <td>
+              <strong style="color:var(--gov-navy);">{{ c.Name }}</strong>
+              {% if c.Aliases %}<br><span style="font-size:0.75rem;color:var(--text-muted);">Alias: {{ c.Aliases }}</span>{% endif %}
+            </td>
+            <td class="mono">{{ c.National_ID or '—' }}</td>
+            <td>
+              <span class="stamp {{ status_class(c.Accused_Status or c.Criminal_Status or 'Accused') }}">
+                {{ c.Role or 'Accused' }} &bull; {{ c.Accused_Status or c.Criminal_Status or 'Accused' }}
+              </span>
+            </td>
+            <td>{{ c.Living_Status or 'Alive' }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty-state">No named suspects identified at current stage of inquiry.</div>
+    {% endif %}
+  </div>
+
+  <!-- Evidence Vault -->
+  <div class="panel">
+    <div class="panel-header">
+      <h3 class="panel-title">Evidence Locker & Forensics</h3>
+      <span style="font-size:0.8rem;color:var(--text-muted);">{{ evidence|length }} Items</span>
+    </div>
+    {% if evidence %}
+      <table class="ledger">
+        <thead><tr><th>Type</th><th>Description</th><th>Storage Location</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for ev in evidence %}
+          <tr>
+            <td><strong>{{ ev.Evidence_Type }}</strong></td>
+            <td>{{ ev.Description }}</td>
+            <td class="mono">{{ ev.Storage_Location }}</td>
+            <td><span class="stamp {{ status_class(ev.Status) }}">{{ ev.Status }}</span></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty-state">Evidence recovery is in progress by forensic team.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% if case %}
+<div class="panel" style="margin-top:20px;">
+  <div class="panel-header">
+    <h3 class="panel-title">Judicial Court Proceedings & Trial Docket</h3>
+    <span class="stamp {{ status_class(case.Status) }}">{{ case.Status }}</span>
+  </div>
+  <table class="kv-table" style="margin-bottom:16px;">
+    <tr><th>Case Number</th><td class="mono"><strong>{{ case.Case_Number }}</strong></td></tr>
+    <tr><th>Court of Jurisdiction</th><td><strong>{{ case.Court_Name }}</strong> ({{ case.Court_Type }})</td></tr>
+    <tr><th>Presiding Judge</th><td>{{ case.Judge_Name }}</td></tr>
+    <tr><th>Filing Date</th><td class="mono">{{ case.Filing_Date|format_date }}</td></tr>
+  </table>
+
+  {% if hearings %}
+    <h4 style="font-size:0.88rem;color:var(--gov-navy);margin-bottom:8px;">Hearing Schedules</h4>
+    <table class="ledger">
+      <thead><tr><th>Date</th><th>Time</th><th>Hearing Summary</th><th>Next Hearing</th></tr></thead>
+      <tbody>
+      {% for h in hearings %}
+        <tr>
+          <td class="mono">{{ h.Hearing_Date|format_date }}</td>
+          <td class="mono">{{ h.Hearing_Time|format_time }}</td>
+          <td>{{ h.Summary }}</td>
+          <td class="mono">{{ h.Next_Hearing_Date|format_date if h.Next_Hearing_Date else 'Pending' }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+  {% if judgment %}
+    <div style="background:var(--gov-green-subtle);border-left:4px solid var(--gov-green);padding:14px;border-radius:var(--radius-sm);margin-top:16px;">
+      <h4 style="color:var(--gov-green-text);margin-bottom:4px;">Final Judicial Judgment & Verdict</h4>
+      <p style="margin:0;font-size:0.86rem;color:var(--text-main);">
+        <strong>Verdict:</strong> {{ judgment.Verdict }} &bull; <strong>Sentence:</strong> {{ judgment.Sentence or 'N/A' }}<br>
+        <strong>Details:</strong> {{ judgment.Details }}
+      </p>
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+<!-- FIR Status History Log -->
+<div class="panel" style="margin-top:20px;">
+  <div class="panel-header">
+    <h3 class="panel-title">FIR Status History & Chain-of-Custody Log</h3>
+  </div>
+  {% if history %}
+    <table class="ledger">
+      <thead><tr><th>Date</th><th>Status</th><th>Updated By</th><th>Remarks</th></tr></thead>
+      <tbody>
+      {% for h in history %}
+        <tr>
+          <td class="mono">{{ h.Updated_Date|format_date }}</td>
+          <td><span class="stamp {{ status_class(h.Status) }}">{{ h.Status }}</span></td>
+          <td><strong>{{ h.Updated_By or 'System' }}</strong></td>
+          <td>{{ h.Remarks }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty-state">No status updates logged yet.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

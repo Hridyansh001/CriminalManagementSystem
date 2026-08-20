@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Report a Crime / File FIR — Digital Police Portal{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow"><a href="{{ url_for('user.dashboard') }}">&larr; Back to Dashboard</a></div>
+    <h1>Register First Information Report (FIR)</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Submit official crime report under Section 154 CrPC to the State Police Bureau.
+    </p>
+  </div>
+  <a href="{{ url_for('citizen_rights') }}" class="btn ghost" style="font-size:0.82rem;">
+    Legal Rights & FAQ &rarr;
+  </a>
+</div>
+
+<div class="form-card-wrapper" style="max-width:860px;margin:0 auto;">
+  <div class="panel">
+    <div style="background:var(--gov-navy-subtle);border-left:4px solid var(--gov-navy);padding:14px 18px;border-radius:var(--radius-sm);margin-bottom:24px;">
+      <div style="font-size:0.75rem;font-weight:700;color:var(--gov-navy);text-transform:uppercase;letter-spacing:0.04em;">Official Notice under Section 154(1) CrPC</div>
+      <p style="font-size:0.82rem;color:var(--text-main);margin:4px 0 0 0;line-height:1.45;">
+        Every citizen is entitled to register a cognizable offense. Furnishing false information to police authorities is a punishable offense under Section 182 / 211 of the Indian Penal Code.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('user.file_fir') }}">
+      <div class="form-grid">
+        <div class="field">
+          <label for="crime_type">Crime Classification <span class="req">*</span></label>
+          <select id="crime_type" name="crime_type" required autofocus>
+            <option value="">-- Select Crime Type --</option>
+            <option value="Theft / Larceny">Theft / Larceny</option>
+            <option value="Burglary / Break-in">Burglary / Break-in</option>
+            <option value="Cybercrime / Online Fraud">Cybercrime / Online Fraud</option>
+            <option value="Assault / Physical Violence">Assault / Physical Violence</option>
+            <option value="Financial Fraud / Embezzlement">Financial Fraud / Embezzlement</option>
+            <option value="Robbery / Extortion">Robbery / Extortion</option>
+            <option value="Harassment / Stalking">Harassment / Stalking</option>
+            <option value="Vehicle Theft">Vehicle Theft</option>
+            <option value="Domestic Violence">Domestic Violence</option>
+            <option value="Narcotics / Drug Offense">Narcotics / Drug Offense</option>
+            <option value="Homicide / Manslaughter">Homicide / Manslaughter</option>
+            <option value="Other Cognizable Offense">Other Cognizable Offense</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="jurisdiction">Police Station Jurisdiction <span class="req">*</span></label>
+          <select id="jurisdiction" name="jurisdiction" required>
+            <option value="">-- Select Jurisdiction Division --</option>
+            {% if jurisdictions %}
+              {% for j in jurisdictions %}
+                <option value="{{ j.Jurisdiction }}">{{ j.Jurisdiction }}</option>
+              {% endfor %}
+            {% else %}
+              <option value="Central District">Central District</option>
+              <option value="North Division">North Division</option>
+              <option value="South Division">South Division</option>
+              <option value="East Metropolitan">East Metropolitan</option>
+              <option value="West District">West District</option>
+              <option value="Cyber Cell Headquarters">Cyber Cell Headquarters</option>
+            {% endif %}
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="location">Exact Place / Location of Occurrence <span class="req">*</span></label>
+        <input type="text" id="location" name="location" placeholder="e.g. Near Metro Station Gate No. 2, Connaught Place, New Delhi" required>
+      </div>
+
+      <div class="field">
+        <label for="description">Detailed Narrative of Incident & Suspect Information <span class="req">*</span></label>
+        <textarea id="description" name="description" rows="6" placeholder="Describe the sequence of events clearly: What happened, when, where, who was involved, any suspect descriptions, vehicle numbers, or witnesses present." required></textarea>
+      </div>
+
+      <!-- Legal Declaration -->
+      <div style="background:#F8FAFC;border:1px solid var(--border-light);padding:14px;border-radius:var(--radius-sm);margin:20px 0;">
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:0.82rem;color:var(--text-main);line-height:1.45;margin:0;">
+          <input type="checkbox" required style="margin-top:3px;accent-color:var(--gov-navy);width:16px;height:16px;">
+          <span>
+            I solemnly affirm that the statements made above are true and accurate to the best of my knowledge. I understand that registering a malicious or fraudulent FIR is legally actionable.
+          </span>
+        </label>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:12px;">
+        <a href="{{ url_for('user.dashboard') }}" class="btn ghost">Cancel</a>
+        <button type="submit" class="btn saffron" style="padding:10px 24px;font-weight:700;font-size:0.92rem;">
+          SUBMIT FIR DOCKET &rarr;
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

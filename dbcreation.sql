@@ -66,7 +66,6 @@ CREATE TABLE Criminal (
 );
 
 
-
 CREATE TABLE FIR_Criminal (
     FIR_ID INT,
     Criminal_ID INT,
@@ -177,8 +176,6 @@ CREATE TABLE Hearing (
     FOREIGN KEY (Case_ID)
         REFERENCES `Case`(Case_ID)
 );
-
-
 
 CREATE TABLE Judgment (
     Judgment_ID INT AUTO_INCREMENT PRIMARY KEY,

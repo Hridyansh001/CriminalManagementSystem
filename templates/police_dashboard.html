@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}Police Investigation Console — Criminal Record Management System{% endblock %}
+{% block content %}
+
+<!-- Officer Command Banner -->
+<div class="greeting-banner" style="border-left-color:var(--gov-saffron-dark);">
+  <div>
+    <div style="font-size:0.75rem;font-weight:700;color:var(--gov-saffron-dark);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">
+      LAW ENFORCEMENT INVESTIGATION CONSOLE &bull; OFFICIAL NODE
+    </div>
+    <h1 class="greeting-heading" style="margin-bottom:4px;">
+      {{ officer.police_rank or 'Officer' }} {{ officer.Name }}
+    </h1>
+    <p class="greeting-sub">
+      <strong>Badge:</strong> <span class="mono">{{ officer.Badge_Number }}</span> &bull; 
+      <strong>Station:</strong> {{ officer.Station_Name }} ({{ officer.Station_Jurisdiction or officer.City or 'Central Division' }}) &bull; 
+      <strong>Role:</strong> Investigating Officer
+    </p>
+  </div>
+  <div style="display:flex;gap:10px;">
+    <a href="{{ url_for('fir.cases_list') }}" class="btn">All FIR Dockets</a>
+    <a href="{{ url_for('fir.criminals_list') }}" class="btn primary">Criminal Registry</a>
+  </div>
+</div>
+
+<!-- Key Stat Metrics Row -->
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="num">{{ metrics.assigned_count if metrics else assigned_firs|length }}</div>
+    <div class="label">Assigned FIR Cases</div>
+  </div>
+  <div class="stat-card alert">
+    <div class="num" style="color:var(--gov-saffron-dark);">{{ metrics.active_count if metrics else 0 }}</div>
+    <div class="label">Active Investigations</div>
+  </div>
+  <div class="stat-card">
+    <div class="num" style="color:var(--gov-green);">{{ metrics.completed_count if metrics else 0 }}</div>
+    <div class="label">Completed / Chargesheeted</div>
+  </div>
+  <div class="stat-card">
+    <div class="num" style="color:var(--gov-navy-light);">{{ metrics.court_cases_count if metrics else 0 }}</div>
+    <div class="label">Under Judicial Trial</div>
+  </div>
+</div>
+
+<!-- Assigned FIR Investigations Ledger -->
+<div class="panel" style="margin-bottom:24px;">
+  <div class="panel-header">
+    <h3 class="panel-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+      My Assigned FIR Investigations
+    </h3>
+    <span style="font-size:0.8rem;color:var(--text-muted);">{{ assigned_firs|length }} Active Case Diaries</span>
+  </div>
+
+  {% if assigned_firs %}
+  <table class="ledger">
+    <thead>
+      <tr>
+        <th>FIR Number</th>
+        <th>Crime Classification</th>
+        <th>Complainant</th>
+        <th>Date Filed</th>
+        <th>Investigation Status</th>
+        <th>FIR Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in assigned_firs %}
+      <tr>
+        <td class="mono">
+          <a href="{{ url_for('police.police_fir_view', fir_id=f.FIR_ID) }}" style="font-weight:700;color:var(--gov-navy);">
+            {{ f.FIR_Number }}
+          </a>
+        </td>
+        <td><strong>{{ f.Crime_Type }}</strong></td>
+        <td>
+          <strong>{{ f.Complainant_Name }}</strong>
+          {% if f.Complainant_Phone %}<br><span class="mono" style="font-size:0.75rem;color:var(--text-muted);">{{ f.Complainant_Phone }}</span>{% endif %}
+        </td>
+        <td class="mono" style="color:var(--text-muted);">{{ f.Date_Filed|format_date }}</td>
+        <td>
+          <span class="stamp {{ status_class(f.Investigation_Status or 'Ongoing') }}">
+            {{ f.Investigation_Status or 'Ongoing' }}
+          </span>
+        </td>
+        <td>
+          <span class="stamp {{ status_class(f.FIR_Status) }}">
+            {{ f.FIR_Status }}
+          </span>
+        </td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <a href="{{ url_for('police.police_fir_view', fir_id=f.FIR_ID) }}" class="btn small primary" style="padding:4px 8px;font-size:0.74rem;">
+              Manage Case &rarr;
+            </a>
+            <a href="{{ url_for('police.add_evidence', fir_id=f.FIR_ID) }}" class="btn small" style="padding:4px 8px;font-size:0.74rem;" title="Add Evidence">
+              + Evidence
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state" style="text-align:center;padding:32px 20px;">
+    <h3 style="font-size:1.05rem;color:var(--gov-navy);margin-bottom:6px;">No FIRs Currently Assigned</h3>
+    <p style="color:var(--text-muted);font-size:0.84rem;">You do not have any open investigation case files assigned to your badge number at this time.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Precinct & Unassigned FIR Queue -->
+<div class="panel">
+  <div class="panel-header">
+    <h3 class="panel-title">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Station Registry & Unassigned FIR Queue
+    </h3>
+    <a href="{{ url_for('fir.cases_list') }}" style="font-size:0.82rem;font-weight:600;">View All Station Records &rarr;</a>
+  </div>
+
+  {% if other_firs %}
+  <table class="ledger">
+    <thead>
+      <tr>
+        <th>FIR Number</th>
+        <th>Crime Type</th>
+        <th>Jurisdiction</th>
+        <th>Complainant</th>
+        <th>Current Assigned IO</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for of in other_firs %}
+      <tr>
+        <td class="mono">
+          <a href="{{ url_for('police.police_fir_view', fir_id=of.FIR_ID) }}" style="font-weight:700;">
+            {{ of.FIR_Number }}
+          </a>
+        </td>
+        <td><strong>{{ of.Crime_Type }}</strong></td>
+        <td>{{ of.Jurisdiction or 'Central District' }}</td>
+        <td>{{ of.Complainant_Name }}</td>
+        <td>
+          {% if of.Assigned_Officer %}
+            <span style="font-size:0.82rem;color:var(--text-main);font-weight:600;">{{ of.Assigned_Officer }}</span>
+          {% else %}
+            <span style="color:var(--gov-amber-text);background:var(--gov-amber-subtle);padding:2px 6px;border-radius:var(--radius-xs);font-size:0.75rem;font-weight:700;">UNASSIGNED</span>
+          {% endif %}
+        </td>
+        <td><span class="stamp {{ status_class(of.FIR_Status) }}">{{ of.FIR_Status }}</span></td>
+        <td>
+          <a href="{{ url_for('police.police_fir_view', fir_id=of.FIR_ID) }}" class="btn small" style="padding:3px 8px;font-size:0.74rem;">
+            Inspect &rarr;
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">No other FIR dockets in current queue.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

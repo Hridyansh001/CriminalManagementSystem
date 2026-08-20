@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Evidence Vault & Forensic Locker — CRMS{% endblock %}
+{% block content %}
+
+<div class="topline">
+  <div>
+    <div class="eyebrow">FORENSIC SCIENCE &bull; CHAIN OF CUSTODY</div>
+    <h1>Central Evidence Vault</h1>
+    <p style="color:var(--text-muted);font-size:0.86rem;margin-top:2px;">
+      Master catalog of all seized evidence items, forensic exhibits, and lab specimens.
+    </p>
+  </div>
+</div>
+
+{% if evidences %}
+<table class="ledger">
+  <thead>
+    <tr>
+      <th>Evidence ID</th>
+      <th>FIR Number</th>
+      <th>Classification</th>
+      <th>Description</th>
+      <th>Storage Location</th>
+      <th>Seizure Date</th>
+      <th>Logged By Officer</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for ev in evidences %}
+    <tr onclick="window.location='{{ url_for('fir.fir_details', fir_id=ev.FIR_ID) if current_user.role=='user' else url_for('police.police_fir_view', fir_id=ev.FIR_ID) }}'" style="cursor:pointer;">
+      <td class="mono" style="font-weight:700;color:var(--gov-navy);">EVID-{{ "%04d"|format(ev.Evidence_ID) }}</td>
+      <td class="mono"><strong>{{ ev.FIR_Number or ('FIR #' ~ ev.FIR_ID) }}</strong></td>
+      <td><strong>{{ ev.Evidence_Type }}</strong></td>
+      <td>{{ ev.Description }}</td>
+      <td class="mono" style="color:var(--gov-navy);">{{ ev.Storage_Location }}</td>
+      <td class="mono" style="color:var(--text-muted);">{{ ev.Collected_Date|format_date }}</td>
+      <td>{{ ev.Collected_By_Name or 'Police' }}</td>
+      <td><span class="stamp {{ status_class(ev.Status) }}">{{ ev.Status }}</span></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="panel empty-state" style="text-align:center;padding:36px 20px;">
+  <h3 style="color:var(--gov-navy);font-size:1.05rem;margin-bottom:6px;">No Evidence Records Found</h3>
+  <p style="color:var(--text-muted);font-size:0.84rem;margin:0;">No forensic evidence has been registered in the vault yet.</p>
+</div>
+{% endif %}
+
+{% endblock %}
