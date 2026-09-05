@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > DASHBOARD</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- POLICE DASHBOARD VIEW -->
+        <div id="policeDashboardView" style="display: none;">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955; margin-bottom: 8px;">
+                SYSTEM STATISTICS
+            </div>
+            <hr>
+
+            <table class="system-stats-table">
+                <tbody>
+                    <tr>
+                        <td class="stat-label">Total FIRs Filed:</td>
+                        <td class="stat-val" id="stat-firs">0</td>
+                    </tr>
+                    <tr>
+                        <td class="stat-label">Total Criminal Records:</td>
+                        <td class="stat-val" id="stat-criminals">0</td>
+                    </tr>
+                    <tr>
+                        <td class="stat-label">Total Active Investigations:</td>
+                        <td class="stat-val" id="stat-investigations">0</td>
+                    </tr>
+                    <tr>
+                        <td class="stat-label">Total Court Cases:</td>
+                        <td class="stat-val" id="stat-cases">0</td>
+                    </tr>
+                    <tr>
+                        <td class="stat-label">Total Police Officers:</td>
+                        <td class="stat-val" id="stat-police">0</td>
+                    </tr>
+                    <tr>
+                        <td class="stat-label">Total Registered Citizens:</td>
+                        <td class="stat-val" id="stat-users">0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="font-size: 13px; font-weight: bold; color: #9a9a9a; margin-top: 15px; margin-bottom: 8px;">
+                MODULE SHORTCUTS:
+            </div>
+            <div class="system-menu-grid">
+                <a href="fir.html" class="menu-link-btn">[ FIR MANAGEMENT ]</a>
+                <a href="criminals.html" class="menu-link-btn">[ CRIMINAL DATABASE ]</a>
+                <a href="investigations.html" class="menu-link-btn">[ INVESTIGATION FILES ]</a>
+                <a href="evidence.html" class="menu-link-btn">[ EVIDENCE VAULT ]</a>
+                <a href="cases.html" class="menu-link-btn">[ COURT CASES ]</a>
+                <a href="courts.html" class="menu-link-btn">[ COURT REGISTRY ]</a>
+                <a href="hearings.html" class="menu-link-btn">[ COURT HEARINGS ]</a>
+                <a href="judgments.html" class="menu-link-btn">[ JUDGMENT ORDERS ]</a>
+                <a href="stations.html" class="menu-link-btn">[ POLICE STATIONS ]</a>
+            </div>
+        </div>
+
+        <!-- USER DASHBOARD VIEW -->
+        <div id="userDashboardView" style="display: none;">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955; margin-bottom: 8px;">
+                USER PORTAL &gt; SUMMARY
+            </div>
+            <p style="color: #9a9a9a; margin-bottom: 12px;">
+                Welcome, <strong style="color:#d0d0d0;" id="userWelcomeName">User</strong>. Use the buttons below to file a new FIR or view status updates.
+            </p>
+
+            <div style="margin-bottom: 15px; display:flex; gap: 8px;">
+                <a href="fir.html" class="btn btn-primary">[ MY FILED FIRs ]</a>
+                <a href="fir.html?action=new" class="btn btn-success">[ + FILE NEW FIR ]</a>
+            </div>
+
+            <div style="font-size: 13px; font-weight: bold; color: #9a9a9a; margin-bottom: 6px;">
+                RECENT FIRs:
+            </div>
+
+            <div class="terminal-table-wrapper">
+                <table class="terminal-table">
+                    <thead>
+                        <tr>
+                            <th>FIR NUMBER</th>
+                            <th>CRIME TYPE</th>
+                            <th>DATE FILED</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userRecentFirsBody">
+                        <tr><td colspan="5" class="no-data">Querying records...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

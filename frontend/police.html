@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > POLICE ROSTER</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                POLICE OFFICERS ROSTER
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + ADD OFFICER ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter name, badge, rank, station..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadPolice()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Police Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="policeTable">
+                <thead>
+                    <tr>
+                        <th>OFFICER ID</th>
+                        <th>NAME</th>
+                        <th>BADGE #</th>
+                        <th>RANK</th>
+                        <th>STATION ID</th>
+                        <th>EMAIL</th>
+                        <th>PHONE</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="policeTableBody">
+                    <tr><td colspan="8" class="no-data">Querying police roster...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Police Officer Modal (Add / Edit) -->
+        <div id="policeModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">REGISTER POLICE OFFICER</h3>
+                    <button class="modal-close" onclick="closeModal('policeModal')">[X]</button>
+                </div>
+                <form id="policeForm" onsubmit="savePolice(event)">
+                    <input type="hidden" id="policeId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="name">Officer Name *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="name" required placeholder="Full name">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="badgeNumber">Badge Number *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="badgeNumber" required placeholder="e.g. B-1045">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="policeRank">Rank / Designation *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="policeRank" required placeholder="e.g. Inspector, Sub-Inspector">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="stationId">Station ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="stationId" required placeholder="Station ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="email">Official Email</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="email" id="email" placeholder="officer@police.gov">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="phone">Phone Number</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="tel" id="phone" placeholder="Contact number">
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="password">Password *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="password" id="password" required placeholder="Login access password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('policeModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE OFFICER ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Police Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>POLICE OFFICER DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="policeDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/police.js"></script>
+</body>
+</html>

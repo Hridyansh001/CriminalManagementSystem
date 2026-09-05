@@ -1,0 +1,164 @@
+/* Terminal-Style Tables, Forms, & Modules */
+
+.terminal-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.search-prompt {
+    display: flex;
+    align-items: center;
+    background-color: #1a1a1a;
+    border: 1px solid #444444;
+    padding: 0 8px;
+    max-width: 380px;
+    flex: 1;
+}
+
+.search-prompt span {
+    color: #6a9955;
+    font-weight: bold;
+    margin-right: 6px;
+    font-size: 13px;
+}
+
+.search-prompt input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #d0d0d0;
+    font-size: 12px;
+    font-family: "Courier New", Courier, monospace;
+    padding: 5px 0;
+}
+
+/* Terminal Plain Table */
+.terminal-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #383838;
+    background-color: #212121;
+    margin-bottom: 15px;
+}
+
+.terminal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    text-align: left;
+}
+
+.terminal-table th {
+    background-color: #282828;
+    color: #6a9955;
+    padding: 7px 10px;
+    font-weight: bold;
+    border-bottom: 1px solid #444444;
+    border-right: 1px solid #333333;
+    white-space: nowrap;
+}
+
+.terminal-table td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #2e2e2e;
+    border-right: 1px solid #2e2e2e;
+    color: #cccccc;
+    vertical-align: middle;
+}
+
+.terminal-table tr:hover {
+    background-color: #262626;
+}
+
+.terminal-table td.actions {
+    white-space: nowrap;
+    display: flex;
+    gap: 4px;
+}
+
+/* Simple Text-Based Badges */
+.badge {
+    display: inline-block;
+    padding: 1px 5px;
+    font-size: 10px;
+    border: 1px solid #555555;
+    background-color: #1a1a1a;
+}
+
+.badge-info {
+    border-color: #569cd6;
+    color: #9cdcfe;
+}
+
+.badge-success {
+    border-color: #6a9955;
+    color: #85c26b;
+}
+
+.badge-warning {
+    border-color: #d7ba7d;
+    color: #d7ba7d;
+}
+
+.badge-danger {
+    border-color: #f48771;
+    color: #f48771;
+}
+
+.badge-secondary {
+    border-color: #555555;
+    color: #999999;
+}
+
+/* Terminal Forms */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #383838;
+}
+
+.no-data {
+    text-align: center;
+    padding: 18px;
+    color: #777777;
+    font-style: italic;
+}
+
+/* Detail view lines */
+.details-list {
+    list-style: none;
+    font-size: 12px;
+}
+
+.details-list li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #333333;
+    display: flex;
+}
+
+.details-list li strong {
+    width: 160px;
+    color: #6a9955;
+}
+
+.details-list li span {
+    flex: 1;
+    color: #d0d0d0;
+}

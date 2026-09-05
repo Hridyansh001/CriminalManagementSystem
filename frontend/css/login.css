@@ -1,0 +1,130 @@
+/* Terminal-Style Login & Registration */
+
+.login-layout {
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 20px;
+    border: 1px solid #383838;
+    background-color: #242424;
+}
+
+.terminal-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #6a9955;
+    margin-bottom: 4px;
+}
+
+.terminal-subtitle {
+    font-size: 12px;
+    color: #888888;
+    margin-bottom: 14px;
+}
+
+.role-select-box {
+    margin-bottom: 16px;
+    padding: 10px 0;
+    border-top: 1px solid #383838;
+    border-bottom: 1px solid #383838;
+}
+
+.role-select-label {
+    font-size: 12px;
+    color: #9a9a9a;
+    margin-bottom: 8px;
+}
+
+.role-btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.role-btn {
+    flex: 1;
+    background-color: #1e1e1e;
+    color: #9a9a9a;
+    border: 1px solid #444444;
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.role-btn.active {
+    background-color: #2e3b2e;
+    color: #6a9955;
+    border-color: #6a9955;
+    font-weight: bold;
+}
+
+/* Terminal Input Groups */
+.term-field {
+    margin-bottom: 12px;
+}
+
+.term-field label {
+    display: block;
+    font-size: 12px;
+    color: #cccccc;
+    margin-bottom: 4px;
+}
+
+.term-field .input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #1a1a1a;
+    border: 1px solid #444444;
+    padding: 0 8px;
+}
+
+.term-field .input-wrapper .prompt {
+    color: #6a9955;
+    font-weight: bold;
+    margin-right: 6px;
+    font-size: 13px;
+    user-select: none;
+}
+
+.term-field input,
+.term-field select,
+.term-field textarea {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #d0d0d0;
+    font-size: 13px;
+    font-family: "Courier New", Courier, monospace;
+    padding: 6px 0;
+}
+
+.term-field textarea {
+    background-color: #1a1a1a;
+    border: 1px solid #444444;
+    padding: 6px 8px;
+    resize: vertical;
+}
+
+.term-field select {
+    background-color: #1a1a1a;
+    cursor: pointer;
+}
+
+.term-field select option {
+    background-color: #242424;
+    color: #d0d0d0;
+}
+
+.btn-row {
+    margin-top: 15px;
+    display: flex;
+    gap: 8px;
+}
+
+.register-prompt {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #383838;
+    font-size: 12px;
+    color: #888888;
+}

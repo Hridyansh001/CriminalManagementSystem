@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > EVIDENCE VAULT</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                EVIDENCE VAULT
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + LOG EVIDENCE ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter evidence type, FIR ID, location..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadEvidences()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Evidence Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="evidenceTable">
+                <thead>
+                    <tr>
+                        <th>ITEM ID</th>
+                        <th>FIR ID</th>
+                        <th>TYPE</th>
+                        <th>STORAGE LOCATION</th>
+                        <th>DATE COLLECTED</th>
+                        <th>OFFICER ID</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="evidenceTableBody">
+                    <tr><td colspan="8" class="no-data">Querying evidence records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Evidence Modal (Add / Edit) -->
+        <div id="evidenceModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">LOG EVIDENCE ITEM</h3>
+                    <button class="modal-close" onclick="closeModal('evidenceModal')">[X]</button>
+                </div>
+                <form id="evidenceForm" onsubmit="saveEvidence(event)">
+                    <input type="hidden" id="evidenceId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="firId">FIR ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="firId" required placeholder="Linked FIR ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="collectedBy">Officer ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="collectedBy" required placeholder="Police ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="evidenceType">Evidence Type *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="evidenceType" required placeholder="e.g. Weapon, Digital, Document">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="collectedDate">Date Collected</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="collectedDate">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="storageLocation">Storage Location</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="storageLocation" placeholder="e.g. Locker 4B, Central Vault">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="status">Custody Status</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="status">
+                                    <option value="IN CUSTODY">IN CUSTODY</option>
+                                    <option value="SENT TO LAB">SENT TO LAB</option>
+                                    <option value="PRODUCED IN COURT">PRODUCED IN COURT</option>
+                                    <option value="DISPOSED / RELEASED">DISPOSED / RELEASED</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="description">Detailed Description</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="description" rows="3" placeholder="Condition, serial numbers, labels..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('evidenceModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE ITEM ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Evidence Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>EVIDENCE ITEM DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="evidenceDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/evidence.js"></script>
+</body>
+</html>

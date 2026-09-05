@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > COURT CASES</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                COURT CASE MANAGEMENT
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + REGISTER CASE ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter case #, FIR ID, status..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadCases()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Cases Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="casesTable">
+                <thead>
+                    <tr>
+                        <th>CASE ID</th>
+                        <th>CASE NUMBER</th>
+                        <th>FIR ID</th>
+                        <th>COURT ID</th>
+                        <th>TYPE</th>
+                        <th>FILING DATE</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="casesTableBody">
+                    <tr><td colspan="8" class="no-data">Querying court cases...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Case Modal (Add / Edit) -->
+        <div id="caseModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">REGISTER COURT CASE</h3>
+                    <button class="modal-close" onclick="closeModal('caseModal')">[X]</button>
+                </div>
+                <form id="caseForm" onsubmit="saveCase(event)">
+                    <input type="hidden" id="caseId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="caseNumber">Case Number *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="caseNumber" required placeholder="e.g. CC-2024-554">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="firId">Linked FIR ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="firId" required placeholder="FIR ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="courtId">Court ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="courtId" required placeholder="Court ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="caseType">Case Type</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="caseType" placeholder="e.g. Criminal Trial">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="filingDate">Filing Date</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="filingDate">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="status">Case Status</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="status">
+                                    <option value="PENDING">PENDING</option>
+                                    <option value="HEARING SCHEDULED">HEARING SCHEDULED</option>
+                                    <option value="IN TRIAL">IN TRIAL</option>
+                                    <option value="DISPOSED">DISPOSED</option>
+                                    <option value="ADJOURNED">ADJOURNED</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('caseModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE CASE ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Case Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>COURT CASE DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="caseDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/cases.js"></script>
+</body>
+</html>

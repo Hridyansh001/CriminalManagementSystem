@@ -1,0 +1,51 @@
+/* Terminal Dashboard Styles */
+
+.system-stats-table {
+    width: 100%;
+    max-width: 500px;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #212121;
+    border: 1px solid #383838;
+}
+
+.system-stats-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid #2d2d2d;
+    font-size: 13px;
+}
+
+.system-stats-table td.stat-label {
+    color: #9a9a9a;
+    width: 65%;
+}
+
+.system-stats-table td.stat-val {
+    color: #4ec9b0;
+    font-weight: bold;
+    text-align: right;
+}
+
+.system-menu-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.menu-link-btn {
+    display: inline-block;
+    background-color: #242424;
+    border: 1px solid #444444;
+    color: #d0d0d0;
+    padding: 6px 14px;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.menu-link-btn:hover {
+    background-color: #2e3b2e;
+    color: #6a9955;
+    border-color: #6a9955;
+    text-decoration: none;
+}

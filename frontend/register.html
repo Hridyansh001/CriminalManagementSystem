@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > USER REGISTRATION</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <div class="login-layout" style="max-width: 540px;">
+            <div class="terminal-title">CRMS &gt; USER REGISTRATION</div>
+            <div class="terminal-subtitle">Citizen Portal Account Creation</div>
+
+            <div id="alert-box" class="alert"></div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="term-field">
+                    <label for="name">Name:</label>
+                    <div class="input-wrapper">
+                        <span class="prompt">&gt;</span>
+                        <input type="text" id="name" required placeholder="Full name" autofocus autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="term-field">
+                    <label for="email">Email:</label>
+                    <div class="input-wrapper">
+                        <span class="prompt">&gt;</span>
+                        <input type="email" id="email" required placeholder="name@email.com" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="term-field">
+                    <label for="phone">Phone:</label>
+                    <div class="input-wrapper">
+                        <span class="prompt">&gt;</span>
+                        <input type="tel" id="phone" required placeholder="Contact phone number" autocomplete="off">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="term-field">
+                        <label for="dob">Date of Birth:</label>
+                        <div class="input-wrapper">
+                            <span class="prompt">&gt;</span>
+                            <input type="date" id="dob" required>
+                        </div>
+                    </div>
+
+                    <div class="term-field">
+                        <label for="gender">Gender:</label>
+                        <div class="input-wrapper">
+                            <span class="prompt">&gt;</span>
+                            <select id="gender" required>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="term-field">
+                    <label for="residentialAddress">Residential Address:</label>
+                    <div class="input-wrapper" style="padding: 0;">
+                        <textarea id="residentialAddress" required rows="2" placeholder="Full residential address"></textarea>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="term-field">
+                        <label for="password">Password:</label>
+                        <div class="input-wrapper">
+                            <span class="prompt">&gt;</span>
+                            <input type="password" id="password" required placeholder="Password">
+                        </div>
+                    </div>
+
+                    <div class="term-field">
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <div class="input-wrapper">
+                            <span class="prompt">&gt;</span>
+                            <input type="password" id="confirmPassword" required placeholder="Re-enter password">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-row" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-success" id="regSubmitBtn">[ REGISTER ]</button>
+                    <a href="index.html" class="btn btn-secondary">[ BACK ]</a>
+                </div>
+            </form>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>

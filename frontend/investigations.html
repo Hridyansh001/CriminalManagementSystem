@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > INVESTIGATIONS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                INVESTIGATION CASE FILES
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + ASSIGN INVESTIGATION ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter FIR ID, Officer ID, status..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadInvestigations()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Investigations Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="invTable">
+                <thead>
+                    <tr>
+                        <th>INV ID</th>
+                        <th>FIR ID</th>
+                        <th>OFFICER ID</th>
+                        <th>START DATE</th>
+                        <th>END DATE</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="invTableBody">
+                    <tr><td colspan="7" class="no-data">Querying investigation files...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Investigation Modal (Add / Edit) -->
+        <div id="invModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">NEW INVESTIGATION FILE</h3>
+                    <button class="modal-close" onclick="closeModal('invModal')">[X]</button>
+                </div>
+                <form id="invForm" onsubmit="saveInvestigation(event)">
+                    <input type="hidden" id="investigationId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="firId">FIR ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="firId" required placeholder="Linked FIR ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="policeId">Officer ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="policeId" required placeholder="Investigating Police ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="startDate">Start Date</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="startDate">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="endDate">End Date</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="endDate">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="status">Investigation Status</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="status">
+                                    <option value="OPEN">OPEN</option>
+                                    <option value="IN PROGRESS">IN PROGRESS</option>
+                                    <option value="CHARGESHEET FILED">CHARGESHEET FILED</option>
+                                    <option value="CLOSED">CLOSED</option>
+                                    <option value="SUSPENDED">SUSPENDED</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="chargesheetDate">Chargesheet Filing Date</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="chargesheetDate">
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="findings">Key Findings</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="findings" rows="2" placeholder="Summary of investigation findings..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="remarks">Officer Remarks</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="remarks" rows="2" placeholder="Additional notes..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('invModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE FILE ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Investigation Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>INVESTIGATION FILE DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="invDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/investigations.js"></script>
+</body>
+</html>

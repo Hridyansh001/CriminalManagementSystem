@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > COURT HEARINGS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                COURT HEARINGS SCHEDULE
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + SCHEDULE HEARING ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter case ID, hearing type, status..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadHearings()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Hearings Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="hearingsTable">
+                <thead>
+                    <tr>
+                        <th>HEARING ID</th>
+                        <th>CASE ID</th>
+                        <th>DATE</th>
+                        <th>TIME</th>
+                        <th>TYPE</th>
+                        <th>STATUS</th>
+                        <th>NEXT DATE</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="hearingsTableBody">
+                    <tr><td colspan="8" class="no-data">Querying hearing records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Hearing Modal (Add / Edit) -->
+        <div id="hearingModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">SCHEDULE COURT HEARING</h3>
+                    <button class="modal-close" onclick="closeModal('hearingModal')">[X]</button>
+                </div>
+                <form id="hearingForm" onsubmit="saveHearing(event)">
+                    <input type="hidden" id="hearingId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="caseId">Case ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="caseId" required placeholder="Linked Case ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="hearingDate">Hearing Date *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="hearingDate" required>
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="hearingTime">Hearing Time</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="time" id="hearingTime">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="hearingType">Hearing Type</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="hearingType" placeholder="e.g. Bail, Arguments">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="status">Hearing Status</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="status">
+                                    <option value="SCHEDULED">SCHEDULED</option>
+                                    <option value="COMPLETED">COMPLETED</option>
+                                    <option value="ADJOURNED">ADJOURNED</option>
+                                    <option value="CANCELLED">CANCELLED</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="nextHearingDate">Next Hearing Date</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="nextHearingDate">
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="remarks">Hearing Notes / Remarks</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="remarks" rows="2" placeholder="Summary of proceedings..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('hearingModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE HEARING ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Hearing Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>HEARING DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="hearingDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/hearings.js"></script>
+</body>
+</html>

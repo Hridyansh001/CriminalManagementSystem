@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > LOGIN</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <div class="login-layout">
+            <div class="terminal-title">CRMS &gt; SYSTEM AUTHENTICATION</div>
+            <div class="terminal-subtitle">Crime Record Management System Terminal</div>
+
+            <div class="role-select-box">
+                <div class="role-select-label">Select Access Role:</div>
+                <div class="role-btn-group">
+                    <button type="button" class="role-btn active" id="tabCop" onclick="selectRole('police')">[ POLICE ]</button>
+                    <button type="button" class="role-btn" id="tabUser" onclick="selectRole('user')">[ CITIZEN / USER ]</button>
+                </div>
+            </div>
+
+            <div id="alert-box" class="alert"></div>
+
+            <div style="font-size: 13px; color: #6a9955; margin-bottom: 12px; font-weight: bold;" id="formHeader">
+                &gt;&gt; POLICE LOGIN
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="term-field">
+                    <label id="identifierLabel" for="identifier">Badge Number / Officer Email:</label>
+                    <div class="input-wrapper">
+                        <span class="prompt">&gt;</span>
+                        <input type="text" id="identifier" required placeholder="Enter badge # or email" autofocus autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="term-field">
+                    <label for="password">Password:</label>
+                    <div class="input-wrapper">
+                        <span class="prompt">&gt;</span>
+                        <input type="password" id="password" required placeholder="Enter password" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button type="submit" class="btn btn-success" id="loginBtn">[ LOGIN ]</button>
+                </div>
+            </form>
+
+            <div class="register-prompt" id="registerSection">
+                New Citizen User? <a href="register.html">[ REGISTER HERE ]</a>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

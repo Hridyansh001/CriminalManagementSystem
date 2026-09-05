@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > COURT REGISTRY</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                COURT REGISTRY
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + REGISTER COURT ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter court name, judge, location..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadCourts()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Courts Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="courtTable">
+                <thead>
+                    <tr>
+                        <th>COURT ID</th>
+                        <th>COURT NAME</th>
+                        <th>TYPE</th>
+                        <th>LOCATION</th>
+                        <th>PRESIDING JUDGE</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="courtTableBody">
+                    <tr><td colspan="6" class="no-data">Querying court records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Court Modal (Add / Edit) -->
+        <div id="courtModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">REGISTER COURT</h3>
+                    <button class="modal-close" onclick="closeModal('courtModal')">[X]</button>
+                </div>
+                <form id="courtForm" onsubmit="saveCourt(event)">
+                    <input type="hidden" id="courtId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="courtName">Court Name *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="courtName" required placeholder="e.g. District Court">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="courtType">Court Type</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="courtType" placeholder="e.g. Sessions, Magistrate">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="location">Location / City</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="location" placeholder="e.g. New Delhi">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="judgeName">Presiding Judge</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="judgeName" placeholder="Honorable Judge Name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('courtModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE COURT ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/courts.js"></script>
+</body>
+</html>

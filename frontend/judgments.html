@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > JUDGMENT ORDERS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                COURT JUDGMENTS &amp; VERDICTS
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + RECORD JUDGMENT ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter case ID, decision, sentence..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadJudgments()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Judgments Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="judgmentsTable">
+                <thead>
+                    <tr>
+                        <th>JUDGMENT ID</th>
+                        <th>CASE ID</th>
+                        <th>DATE</th>
+                        <th>DECISION / VERDICT</th>
+                        <th>SENTENCE</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="judgmentsTableBody">
+                    <tr><td colspan="6" class="no-data">Querying court judgments...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Judgment Modal (Add / Edit) -->
+        <div id="judgmentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">RECORD COURT JUDGMENT</h3>
+                    <button class="modal-close" onclick="closeModal('judgmentModal')">[X]</button>
+                </div>
+                <form id="judgmentForm" onsubmit="saveJudgment(event)">
+                    <input type="hidden" id="judgmentId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="caseId">Case ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="caseId" required placeholder="Linked Case ID">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="judgmentDate">Judgment Date *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="judgmentDate" required>
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="decision">Decision / Verdict *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="decision" required>
+                                    <option value="GUILTY / CONVICTED">GUILTY / CONVICTED</option>
+                                    <option value="NOT GUILTY / ACQUITTED">NOT GUILTY / ACQUITTED</option>
+                                    <option value="DISMISSED">DISMISSED</option>
+                                    <option value="SETTLED">SETTLED</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="sentence">Sentence / Penalty</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="sentence" placeholder="e.g. 5 Years Imprisonment, Fine">
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="basis">Legal Basis / Rationale</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="basis" rows="2" placeholder="Legal grounds and sections applied..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="remarks">Judge Remarks</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="remarks" rows="2" placeholder="Judicial order notes..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('judgmentModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE JUDGMENT ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Judgment Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>JUDGMENT DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="judgmentDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/judgments.js"></script>
+</body>
+</html>

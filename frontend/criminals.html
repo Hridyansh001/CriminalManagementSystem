@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > CRIMINAL DATABASE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                CRIMINAL DATABASE
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + ADD CRIMINAL ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter name, national ID, aliases, level..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadCriminals()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Criminals Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="criminalTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>NATIONAL ID</th>
+                        <th>ALIASES</th>
+                        <th>LEVEL</th>
+                        <th>STATUS</th>
+                        <th>LIVING</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="criminalTableBody">
+                    <tr><td colspan="8" class="no-data">Querying criminal records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Criminal Modal (Add / Edit) -->
+        <div id="criminalModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">ADD CRIMINAL RECORD</h3>
+                    <button class="modal-close" onclick="closeModal('criminalModal')">[X]</button>
+                </div>
+                <form id="criminalForm" onsubmit="saveCriminal(event)">
+                    <input type="hidden" id="criminalId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="name">Criminal Name *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="name" required placeholder="Legal full name">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="nationalId">National ID</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="nationalId" placeholder="National ID / Passport #">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="aliases">Aliases / Known As</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="aliases" placeholder="Aliases">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="levelOfCrime">Crime Level</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="levelOfCrime" placeholder="e.g. Felony, Misdemeanor">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="status">Custody Status</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="status">
+                                    <option value="IN CUSTODY">IN CUSTODY</option>
+                                    <option value="WANTED / AT LARGE">WANTED / AT LARGE</option>
+                                    <option value="ON BAIL">ON BAIL</option>
+                                    <option value="CONVICTED">CONVICTED</option>
+                                    <option value="ACQUITTED">ACQUITTED</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="livingStatus">Living Status</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="livingStatus">
+                                    <option value="ALIVE">ALIVE</option>
+                                    <option value="DECEASED">DECEASED</option>
+                                    <option value="UNKNOWN">UNKNOWN</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('criminalModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE RECORD ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Criminal Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>CRIMINAL PROFILE DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="criminalDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/criminals.js"></script>
+</body>
+</html>

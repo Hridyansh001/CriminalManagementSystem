@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > FIR MANAGEMENT</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;" id="pageHeading">
+                FIR MANAGEMENT
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()" id="addNewFirBtn">[ + FILE FIR ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter FIR #, crime type, or location..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadFirs()">[ REFRESH ]</button>
+        </div>
+
+        <!-- FIR Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="firTable">
+                <thead>
+                    <tr id="tableHeaderRow">
+                        <th>FIR ID</th>
+                        <th>FIR NUMBER</th>
+                        <th id="thUser">COMPLAINANT</th>
+                        <th>CRIME TYPE</th>
+                        <th>LOCATION</th>
+                        <th>DATE FILED</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="firTableBody">
+                    <tr><td colspan="8" class="no-data">Querying FIR records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FIR Modal (Create / Edit) -->
+        <div id="firModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">FILE NEW FIR</h3>
+                    <button class="modal-close" onclick="closeModal('firModal')">[X]</button>
+                </div>
+                <form id="firForm" onsubmit="saveFir(event)">
+                    <input type="hidden" id="fir_id">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="firnumber">FIR Number *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="firnumber" required placeholder="e.g. FIR-2024-001">
+                            </div>
+                        </div>
+
+                        <div class="term-field" id="userIdGroup">
+                            <label for="userid">Complainant User ID *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="number" id="userid" required placeholder="Citizen ID #">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="crimetype">Crime Type *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="crimetype" required placeholder="e.g. Theft, Robbery">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="date_filed">Date Filed *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="date_filed" required>
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="location">Incident Location</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="location" placeholder="Location">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="jurisdiction">Jurisdiction Station</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="jurisdiction" placeholder="Station name">
+                            </div>
+                        </div>
+
+                        <div class="term-field" id="statusGroup">
+                            <label for="status">Status</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <select id="status">
+                                    <option value="REGISTERED">REGISTERED</option>
+                                    <option value="UNDER INVESTIGATION">UNDER INVESTIGATION</option>
+                                    <option value="CHARGESHEETED">CHARGESHEETED</option>
+                                    <option value="CLOSED">CLOSED</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="term-field" id="lastUpdatedGroup">
+                            <label for="lastupdated">Last Updated Date</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="date" id="lastupdated">
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="description">Incident Description *</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="description" rows="3" required placeholder="Detailed description of incident..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('firModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success" id="saveBtn">[ SUBMIT FIR ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- View Details Modal -->
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>FIR RECORD DETAILS</h3>
+                    <button class="modal-close" onclick="closeModal('viewModal')">[X]</button>
+                </div>
+                <ul class="details-list" id="firDetailsContent"></ul>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('viewModal')">[ CLOSE ]</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/fir.js"></script>
+</body>
+</html>

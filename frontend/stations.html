@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRMS > POLICE STATIONS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+    <div class="terminal-container">
+        <!-- Dynamic Header / Navbar -->
+        <div id="navbar-container"></div>
+
+        <div class="terminal-toolbar">
+            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+                POLICE STATION DIRECTORY
+            </div>
+            <button class="btn btn-success" onclick="openAddModal()">[ + ADD STATION ]</button>
+        </div>
+        <hr>
+
+        <div id="alert-box" class="alert"></div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="terminal-toolbar">
+            <div class="search-prompt">
+                <span>&gt; SEARCH:</span>
+                <input type="text" id="searchInput" placeholder="Enter station name, city, jurisdiction..." onkeyup="filterTable()">
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="loadStations()">[ REFRESH ]</button>
+        </div>
+
+        <!-- Stations Data Table -->
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="stationTable">
+                <thead>
+                    <tr>
+                        <th>STATION ID</th>
+                        <th>STATION NAME</th>
+                        <th>CITY</th>
+                        <th>JURISDICTION</th>
+                        <th>ADDRESS</th>
+                        <th>PHONE</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="stationTableBody">
+                    <tr><td colspan="7" class="no-data">Querying police stations...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Station Modal (Add / Edit) -->
+        <div id="stationModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">ADD POLICE STATION</h3>
+                    <button class="modal-close" onclick="closeModal('stationModal')">[X]</button>
+                </div>
+                <form id="stationForm" onsubmit="saveStation(event)">
+                    <input type="hidden" id="stationId">
+
+                    <div class="form-grid">
+                        <div class="term-field">
+                            <label for="stationName">Station Name *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="stationName" required placeholder="e.g. Central Station">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="city">City *</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="city" required placeholder="e.g. Delhi">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="jurisdiction">Jurisdiction Zone</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="text" id="jurisdiction" placeholder="e.g. North Zone">
+                            </div>
+                        </div>
+
+                        <div class="term-field">
+                            <label for="phone">Phone Number</label>
+                            <div class="input-wrapper">
+                                <span class="prompt">&gt;</span>
+                                <input type="tel" id="phone" placeholder="e.g. 011-23456789">
+                            </div>
+                        </div>
+
+                        <div class="term-field form-group full-width">
+                            <label for="address">Full Address</label>
+                            <div class="input-wrapper" style="padding:0;">
+                                <textarea id="address" rows="2" placeholder="Station street address..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('stationModal')">[ CANCEL ]</button>
+                        <button type="submit" class="btn btn-success">[ SAVE STATION ]</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            CRMS &bull; DBMS Project Terminal Interface
+        </footer>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/stations.js"></script>
+</body>
+</html>
