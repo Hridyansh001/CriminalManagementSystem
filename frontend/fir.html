@@ -15,7 +15,7 @@
         <div id="navbar-container"></div>
 
         <div class="terminal-toolbar">
-            <div style="font-size: 14px; font-weight: bold; color: #6a9955;" id="pageHeading">
+            <div style="font-size: 14px; font-weight: bold; color: #222222;" id="pageHeading">
                 FIR MANAGEMENT
             </div>
             <button class="btn btn-success" onclick="openAddModal()" id="addNewFirBtn">[ + FILE FIR ]</button>
@@ -118,13 +118,27 @@
                             <div class="input-wrapper">
                                 <span class="prompt">&gt;</span>
                                 <select id="status">
-                                    <option value="REGISTERED">REGISTERED</option>
-                                    <option value="UNDER INVESTIGATION">UNDER INVESTIGATION</option>
-                                    <option value="CHARGESHEETED">CHARGESHEETED</option>
-                                    <option value="CLOSED">CLOSED</option>
+                                    <option value="FIR Registered">FIR Registered</option>
+                                    <option value="Under Investigation">Under Investigation</option>
+                                    <option value="Evidence Collected">Evidence Collected</option>
+                                    <option value="Investigation Completed">Investigation Completed</option>
+                                    <option value="Chargesheet Filed">Chargesheet Filed</option>
+                                    <option value="Case In Court">Case In Court</option>
+                                    <option value="Case Closed">Case Closed</option>
                                 </select>
                             </div>
                         </div>
+                        <!-- <div class="term-field" id="statusGroup">
+    <label>Status</label>
+    <div>
+        <label><input type="radio" name="firStatus" value="FIR Registered"> FIR Registered</label><br>
+        <label><input type="radio" name="firStatus" value="Under Investigation"> Under Investigation</label><br>
+        <label><input type="radio" name="firStatus" value="Chargesheet Filed"> Chargesheet Filed</label><br>
+        <label><input type="radio" name="firStatus" value="Case In Court"> Case In Court</label><br>
+        <label><input type="radio" name="firStatus" value="Case Closed"> Case Closed</label>
+    </div>
+</div> -->
+
 
                         <div class="term-field" id="lastUpdatedGroup">
                             <label for="lastupdated">Last Updated Date</label>

@@ -1,4 +1,4 @@
-/* Terminal-Inspired Dark Stylesheet for CRMS */
+/* Terminal-Inspired Light Stylesheet for CRMS (White BG, Dark Grey Accents) */
 
 * {
     margin: 0;
@@ -8,8 +8,8 @@
 }
 
 body {
-    background-color: #1e1e1e;
-    color: #d0d0d0;
+    background-color: #ffffff;
+    color: #222222;
     min-height: 100vh;
     padding: 15px 25px;
     font-size: 13px;
@@ -18,31 +18,32 @@ body {
 
 /* Links & Text */
 a {
-    color: #6a9955;
+    color: #222222;
     text-decoration: none;
+    font-weight: bold;
 }
 
 a:hover {
     text-decoration: underline;
-    color: #85c26b;
+    color: #000000;
 }
 
 h1, h2, h3, h4 {
-    font-weight: normal;
-    color: #e0e0e0;
+    font-weight: bold;
+    color: #222222;
     letter-spacing: 0.5px;
 }
 
 hr {
     border: none;
-    border-top: 1px solid #383838;
+    border-top: 1px solid #cccccc;
     margin: 12px 0;
 }
 
 /* System Header & Navigation */
 .system-header {
-    border: 1px solid #383838;
-    background-color: #252525;
+    border: 1px solid #cccccc;
+    background-color: #f8f9fa;
     padding: 12px 16px;
     margin-bottom: 18px;
 }
@@ -51,7 +52,7 @@ hr {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #383838;
+    border-bottom: 1px solid #e0e0e0;
     padding-bottom: 8px;
     margin-bottom: 10px;
     flex-wrap: wrap;
@@ -61,16 +62,17 @@ hr {
 .system-title-row .logo {
     font-size: 15px;
     font-weight: bold;
-    color: #6a9955;
+    color: #222222;
 }
 
 .system-title-row .user-meta {
     font-size: 12px;
-    color: #9a9a9a;
+    color: #666666;
 }
 
 .system-title-row .user-meta span {
-    color: #4ec9b0;
+    color: #222222;
+    font-weight: bold;
 }
 
 .nav-bar {
@@ -82,9 +84,9 @@ hr {
 
 .nav-btn {
     display: inline-block;
-    background-color: #1e1e1e;
-    color: #cccccc;
-    border: 1px solid #444444;
+    background-color: #ffffff;
+    color: #222222;
+    border: 1px solid #777777;
     padding: 4px 9px;
     font-size: 12px;
     text-decoration: none;
@@ -93,21 +95,22 @@ hr {
 
 .nav-btn:hover,
 .nav-btn.active {
-    background-color: #333333;
-    color: #6a9955;
-    border-color: #6a9955;
+    background-color: #f0f0f0;
+    color: #000000;
+    border-color: #222222;
     text-decoration: none;
 }
 
 .nav-btn.logout {
-    color: #f48771;
-    border-color: #5a2d28;
+    color: #222222;
+    border-color: #777777;
     margin-left: auto;
 }
 
 .nav-btn.logout:hover {
-    background-color: #3c1e1a;
-    border-color: #f48771;
+    background-color: #f0f0f0;
+    color: #000000;
+    border-color: #222222;
 }
 
 /* Layout container */
@@ -120,36 +123,27 @@ hr {
 .alert {
     padding: 8px 12px;
     margin-bottom: 14px;
-    border: 1px solid #444;
-    background-color: #252525;
+    border: 1px solid #777777;
+    background-color: #ffffff;
+    color: #222222;
     font-size: 12px;
     display: none;
 }
 
-.alert-success {
-    border-color: #6a9955;
-    color: #85c26b;
-    background-color: #1a2a1a;
-}
-
-.alert-danger {
-    border-color: #f48771;
-    color: #f48771;
-    background-color: #2a1a1a;
-}
-
+.alert-success,
+.alert-danger,
 .alert-info {
-    border-color: #569cd6;
-    color: #9cdcfe;
-    background-color: #1a222a;
+    border-color: #777777;
+    color: #222222;
+    background-color: #ffffff;
 }
 
-/* Simple Terminal Buttons */
+/* Simple Terminal Buttons - Uniform White Box Style */
 .btn {
     display: inline-block;
-    background-color: #2b2b2b;
-    color: #d0d0d0;
-    border: 1px solid #555555;
+    background-color: #ffffff;
+    color: #222222;
+    border: 1px solid #777777;
     padding: 5px 12px;
     font-size: 12px;
     font-family: "Courier New", Courier, monospace;
@@ -159,39 +153,27 @@ hr {
 }
 
 .btn:hover {
-    background-color: #383838;
-    color: #ffffff;
+    background-color: #f0f0f0;
+    color: #000000;
+    border-color: #222222;
+}
+
+.btn-primary,
+.btn-success,
+.btn-danger,
+.btn-secondary {
+    background-color: #ffffff;
     border-color: #777777;
+    color: #222222;
 }
 
-.btn-primary {
-    background-color: #1f3a52;
-    border-color: #569cd6;
-    color: #9cdcfe;
-}
-.btn-primary:hover {
-    background-color: #2b4e6d;
-    color: #ffffff;
-}
-
-.btn-success {
-    background-color: #1e331e;
-    border-color: #6a9955;
-    color: #85c26b;
-}
-.btn-success:hover {
-    background-color: #2b4a2b;
-    color: #ffffff;
-}
-
-.btn-danger {
-    background-color: #3a1e1e;
-    border-color: #f48771;
-    color: #f48771;
-}
-.btn-danger:hover {
-    background-color: #522828;
-    color: #ffffff;
+.btn-primary:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-secondary:hover {
+    background-color: #f0f0f0;
+    border-color: #222222;
+    color: #000000;
 }
 
 .btn-sm {
@@ -208,45 +190,48 @@ hr {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.4);
     overflow: auto;
 }
 
 .modal-content {
-    background-color: #242424;
+    background-color: #ffffff;
     margin: 30px auto;
     padding: 16px 20px;
-    border: 1px solid #555555;
+    border: 1px solid #777777;
     width: 90%;
     max-width: 600px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
 
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #383838;
+    border-bottom: 1px solid #dddddd;
     padding-bottom: 8px;
     margin-bottom: 14px;
 }
 
 .modal-header h3 {
     font-size: 14px;
-    color: #6a9955;
+    color: #222222;
+    font-weight: bold;
 }
 
 .modal-close {
-    background: none;
-    border: 1px solid #555;
-    color: #9a9a9a;
+    background: #ffffff;
+    border: 1px solid #777777;
+    color: #222222;
     padding: 2px 6px;
     cursor: pointer;
     font-size: 12px;
 }
 
 .modal-close:hover {
-    color: #f48771;
-    border-color: #f48771;
+    background-color: #f0f0f0;
+    color: #000000;
+    border-color: #222222;
 }
 
 /* Footer */
@@ -254,7 +239,7 @@ footer {
     text-align: left;
     padding-top: 15px;
     margin-top: 30px;
-    border-top: 1px solid #333333;
-    color: #666666;
+    border-top: 1px solid #e0e0e0;
+    color: #777777;
     font-size: 11px;
 }

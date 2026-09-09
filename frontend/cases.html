@@ -15,7 +15,7 @@
         <div id="navbar-container"></div>
 
         <div class="terminal-toolbar">
-            <div style="font-size: 14px; font-weight: bold; color: #6a9955;">
+            <div style="font-size: 14px; font-weight: bold; color: #222222;">
                 COURT CASE MANAGEMENT
             </div>
             <button class="btn btn-success" onclick="openAddModal()">[ + REGISTER CASE ]</button>
@@ -28,20 +28,20 @@
         <div class="terminal-toolbar">
             <div class="search-prompt">
                 <span>&gt; SEARCH:</span>
-                <input type="text" id="searchInput" placeholder="Enter case #, FIR ID, status..." onkeyup="filterTable()">
+                <input type="text" id="searchInput" placeholder="Enter case #, FIR ID, court, status..." onkeyup="filterTable()">
             </div>
             <button class="btn btn-secondary btn-sm" onclick="loadCases()">[ REFRESH ]</button>
         </div>
 
-        <!-- Cases Data Table -->
+        <!-- Registered Court Cases Data Table -->
         <div class="terminal-table-wrapper">
             <table class="terminal-table" id="casesTable">
                 <thead>
                     <tr>
                         <th>CASE ID</th>
                         <th>CASE NUMBER</th>
-                        <th>FIR ID</th>
-                        <th>COURT ID</th>
+                        <th>LINKED FIR</th>
+                        <th>COURT</th>
                         <th>TYPE</th>
                         <th>FILING DATE</th>
                         <th>STATUS</th>
@@ -50,6 +50,30 @@
                 </thead>
                 <tbody id="casesTableBody">
                     <tr><td colspan="8" class="no-data">Querying court cases...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FIRs Transferred / In Court Section -->
+        <div style="font-size: 13px; font-weight: bold; color: #222222; margin-top: 25px; margin-bottom: 8px;">
+            &gt;&gt; FIRs TRANSFERRED TO COURT / IN COURT
+        </div>
+        <div class="terminal-table-wrapper">
+            <table class="terminal-table" id="courtFirsTable">
+                <thead>
+                    <tr>
+                        <th>FIR ID</th>
+                        <th>FIR NUMBER</th>
+                        <th>CRIME TYPE</th>
+                        <th>DATE FILED</th>
+                        <th>LOCATION / JURISDICTION</th>
+                        <th>FIR STATUS</th>
+                        <th>COURT CASE STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="courtFirsTableBody">
+                    <tr><td colspan="8" class="no-data">Checking court-referred FIRs...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -69,7 +93,7 @@
                             <label for="caseNumber">Case Number *</label>
                             <div class="input-wrapper">
                                 <span class="prompt">&gt;</span>
-                                <input type="text" id="caseNumber" required placeholder="e.g. CC-2024-554">
+                                <input type="text" id="caseNumber" required placeholder="e.g. CASE-2026-005">
                             </div>
                         </div>
 
@@ -77,7 +101,7 @@
                             <label for="firId">Linked FIR ID *</label>
                             <div class="input-wrapper">
                                 <span class="prompt">&gt;</span>
-                                <input type="number" id="firId" required placeholder="FIR ID">
+                                <input type="number" id="firId" required placeholder="FIR ID (e.g. 3, 6, 9, 20)">
                             </div>
                         </div>
 
@@ -85,7 +109,7 @@
                             <label for="courtId">Court ID *</label>
                             <div class="input-wrapper">
                                 <span class="prompt">&gt;</span>
-                                <input type="number" id="courtId" required placeholder="Court ID">
+                                <input type="number" id="courtId" required placeholder="Court ID (e.g. 1, 2, 3)">
                             </div>
                         </div>
 
@@ -93,7 +117,7 @@
                             <label for="caseType">Case Type</label>
                             <div class="input-wrapper">
                                 <span class="prompt">&gt;</span>
-                                <input type="text" id="caseType" placeholder="e.g. Criminal Trial">
+                                <input type="text" id="caseType" placeholder="e.g. Robbery / Trial">
                             </div>
                         </div>
 
@@ -110,11 +134,12 @@
                             <div class="input-wrapper">
                                 <span class="prompt">&gt;</span>
                                 <select id="status">
-                                    <option value="PENDING">PENDING</option>
-                                    <option value="HEARING SCHEDULED">HEARING SCHEDULED</option>
-                                    <option value="IN TRIAL">IN TRIAL</option>
-                                    <option value="DISPOSED">DISPOSED</option>
-                                    <option value="ADJOURNED">ADJOURNED</option>
+                                    <option value="Under Trial">Under Trial</option>
+                                    <option value="Hearing Scheduled">Hearing Scheduled</option>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Closed">Closed</option>
+                                    <option value="Disposed">Disposed</option>
+                                    <option value="Adjourned">Adjourned</option>
                                 </select>
                             </div>
                         </div>

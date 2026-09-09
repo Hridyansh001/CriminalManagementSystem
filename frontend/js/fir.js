@@ -113,7 +113,7 @@ function openAddModal() {
 
     if (userRole === "user") {
         document.getElementById("userid").value = currentUserId;
-        document.getElementById("status").value = "REGISTERED";
+        document.getElementById("status").value = "FIR Registered";
     }
 
     document.getElementById("firModal").style.display = "block";
@@ -133,7 +133,25 @@ function openEditModal(id) {
     document.getElementById("date_filed").value = item.date_filed || "";
     document.getElementById("location").value = item.location || "";
     document.getElementById("jurisdiction").value = item.jurisdiction || "";
-    document.getElementById("status").value = item.status || "REGISTERED";
+
+    const statusSelect = document.getElementById("status");
+    const rawStatus = item.status || "FIR Registered";
+    let matched = false;
+    for (let i = 0; i < statusSelect.options.length; i++) {
+        if (statusSelect.options[i].value.toLowerCase() === rawStatus.toLowerCase()) {
+            statusSelect.selectedIndex = i;
+            matched = true;
+            break;
+        }
+    }
+    if (!matched) {
+        const opt = document.createElement("option");
+        opt.value = rawStatus;
+        opt.textContent = rawStatus;
+        statusSelect.appendChild(opt);
+        statusSelect.value = rawStatus;
+    }
+
     document.getElementById("lastupdated").value = item.lastupdated || new Date().toISOString().split("T")[0];
     document.getElementById("description").value = item.description || "";
 

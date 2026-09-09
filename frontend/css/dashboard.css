@@ -1,27 +1,27 @@
-/* Terminal Dashboard Styles */
+/* Terminal Dashboard Styles (White BG, Dark Grey Accents) */
 
 .system-stats-table {
     width: 100%;
     max-width: 500px;
     border-collapse: collapse;
     margin-bottom: 20px;
-    background-color: #212121;
-    border: 1px solid #383838;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
 }
 
 .system-stats-table td {
     padding: 6px 12px;
-    border-bottom: 1px solid #2d2d2d;
+    border-bottom: 1px solid #eeeeee;
     font-size: 13px;
 }
 
 .system-stats-table td.stat-label {
-    color: #9a9a9a;
+    color: #555555;
     width: 65%;
 }
 
 .system-stats-table td.stat-val {
-    color: #4ec9b0;
+    color: #222222;
     font-weight: bold;
     text-align: right;
 }
@@ -35,17 +35,18 @@
 
 .menu-link-btn {
     display: inline-block;
-    background-color: #242424;
-    border: 1px solid #444444;
-    color: #d0d0d0;
+    background-color: #ffffff;
+    border: 1px solid #777777;
+    color: #222222;
     padding: 6px 14px;
     font-size: 12px;
     text-decoration: none;
+    font-family: "Courier New", Courier, monospace;
 }
 
 .menu-link-btn:hover {
-    background-color: #2e3b2e;
-    color: #6a9955;
-    border-color: #6a9955;
+    background-color: #f0f0f0;
+    color: #000000;
+    border-color: #222222;
     text-decoration: none;
 }

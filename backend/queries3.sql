@@ -12,4 +12,4 @@
 -- SELECT * FROM Judgment;
 -- SELECT * FROM User
 
-select * from police;
+SELECT * FROM User WHERE Email="kush@gmail.com";
